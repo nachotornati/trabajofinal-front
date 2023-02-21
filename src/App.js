@@ -1,24 +1,18 @@
-import logo from './logo.svg';
+import LandingPage from "./components/LandingPage";
+import Home from "./components/Home";
+import Navigator from "./components/Navigator";
+import PantallaEncuestas from "./components/PantallaEncuestas";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route exact path='/' element={<><LandingPage /> <Home/></>}  />
+        <Route exact path='/nuevaEncuesta' element={<><Navigator/><PantallaEncuestas/></>}    />
+      </Routes>
+    </Router>
   );
 }
 
