@@ -13,12 +13,13 @@ import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
+import HomeIcon from '@mui/icons-material/Home';
 
 
 //import SavingsIcon from '@mui/icons-material/Savings'
 
 import MenuIcon from '@mui/icons-material/Menu';
-//import { ProfileNavigatorItem } from "./ProfileNavigatorItem";
+import { NavigatorItem } from "./NavigatorItem";
 //import { BACKEND_URL } from "../../CONSTANTS";
 //import { auth } from "../../firebase"
 //import { signOut } from "firebase/auth";
@@ -78,7 +79,7 @@ export const Navigator = () => {
 
     const list = (anchor) => (
         <Box
-            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250, backgroundColor: 'black', height: "100%" }}
+            sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250, backgroundColor: 'white', height: "100%" }}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
@@ -87,25 +88,22 @@ export const Navigator = () => {
             <div style={{ "width": "100%", "marginTop": "25px", "textAlign": "center" }}>
 
                 <img
-                    src="/logo192.png"
-                    width="75"
-                    height="75"
+                    src="/fundacion-si-manuel-lozano (1).png"
+                    width="50"
+                    height="50"
                     className="d-inline-block align-top logo"
                     style={{ "margin": "auto" }}
                     alt="logo"
                 /><br />
-                <span className="custom-font-light" style={{ "color": "white", "fontSize": "25px" }}>Fundacion</span>
             </div>
 
-            {/* <List>
+            <List>
 
-                <ProfileNavigatorItem style={{ width: 100 }} name={"Home"} icon={<HomeIcon sx={{ color: "white" }} />} path={"/profile/home"} />
-                <ProfileNavigatorItem name={"Categorias"} icon={<CategorySharpIcon sx={{ color: "white" }} />} path={"/profile/categories"} />
-                <ProfileNavigatorItem name={"ConfiguraciÃ³n"} icon={<SettingsIcon sx={{ color: "white" }} />} path={"/profile/settings"} />
-                <ProfileNavigatorItem name={"Mis Presupuestos"} icon={<RequestQuote sx={{ color: "white" }} />} path={"/profile/budget"} />
-                <ProfileNavigatorItem name={"Notificaciones"} icon={<NotificationsActiveIcon sx={{ color: "white" }} />} path={"/profile/notifications"} />
+                <NavigatorItem name={"Home"} icon={<HomeIcon sx={{ color: "#8d75c6" }} />} path={"/"} />
+                
+                
             </List>
- */}
+ 
             <Divider sx={{ color: "white" }} />
 
            
@@ -117,11 +115,22 @@ export const Navigator = () => {
     return (
         <>
             <Navbar bg="black" variant="dark">
-                <Container >
+                <Container style={{display:'flex'}}>
+                <Navbar.Brand style={{marginRight:'25px',marginLeft:'40px',marginTop:'9px'}}>
+                         <img
+                            src="/fundacion-si-manuel-lozano (1).png"
+                            width="50"
+                            height="50"
+                            className="d-inline-block align-top logo"
+                            //style={{ "marginRight": "15px", "marginLeft": "15px" }}
+                            alt="logo"
+                        /> 
 
+                        
+                    </Navbar.Brand>
                     <React.Fragment key={"left"} >
-                        <Button className="custom-font-light" variant="outlined"  onClick={toggleDrawer("left", true)}><MenuIcon /></Button>
-
+                        <Button className="custom-font"  disableRipple variant="outlined" style={{border:0}} onClick={toggleDrawer("left", true)}><MenuIcon sx={{color:'#8d75c6', fontSize:40}} /></Button>
+                        
                         <Drawer
                             anchor={"left"}
                             open={state["left"]}
@@ -130,18 +139,7 @@ export const Navigator = () => {
                             {list("left")}
                         </Drawer>
                     </React.Fragment>
-                    <Navbar.Brand>
-                        <img
-                            src="/logo192.png"
-                            width="30"
-                            height="30"
-                            className="d-inline-block align-top logo"
-                            style={{ "marginRight": "15px", "marginLeft": "15px" }}
-                            alt="logo"
-                        />
-
-                        <span className="custom-font-light">Fundacion SI</span>
-                    </Navbar.Brand>
+                   
                 </Container>
             </Navbar>
         </>

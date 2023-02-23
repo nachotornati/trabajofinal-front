@@ -14,14 +14,13 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import ComedorForm from './ComedorForm';
 import EncuestaItem from './EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material'; 
-import Carousel, {Carouselitem} from "./Carousel"
-
 
 const mdTheme = createTheme();
 
-export default function PantallaEncuestas(props) {
+export default function NuevoComedor(props) {
     return(
 
         <ThemeProvider theme={mdTheme}>
@@ -40,17 +39,28 @@ export default function PantallaEncuestas(props) {
                 }}
             >
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={3} >
-                        <Grid item xs={12} style={{display:'flex', justifyContent:'center',height:'100%'}}>
-                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column',width:'75%'}}>
-                                <Carousel>
-                                    <Carouselitem tipo={'completar'}> ¿Cuantas personas comen en el comedor?</Carouselitem>
-                                    <Carouselitem tipo={'select'}> Tipo de ayuda</Carouselitem>
-                                    <Carouselitem tipo={'checkbox'}>¿Hay ayudantes remunerados?</Carouselitem>
-                                </Carousel>
+                    <Grid container spacing={2} >
+                        <Grid item xs={12}>
+                            <Paper
+                                sx={{
+                                    p: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                    Nuevo Comedor
+                                </Typography>
 
-                            </Paper>
-                        </Grid>    
+                              
+                             
+                             </Paper>         
+                        </Grid>
+                       <Grid item xs={12} style={{display:'flex', justifyContent:'center'}}>
+                       <Paper sx={{ p: 2,width:'75%'}}>
+                                <ComedorForm/>
+                        </Paper>
+                       </Grid>
                     </Grid>
                 </Container>
             </Box>

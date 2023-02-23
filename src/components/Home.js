@@ -14,6 +14,9 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
+import PollIcon from '@mui/icons-material/Poll';
+import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
+import ComedorItem from './ComedorItem';
 import { TableContainer, TablePagination } from '@mui/material';
 
 const mdTheme = createTheme();
@@ -52,28 +55,14 @@ export default function Home(props) {
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
                                 <Grid item xs={6} md={6} lg={6}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 180,
-                                        }}
-                                    >
-                                        <Button variant="contained" style={{ width: '100%', height: '100%' }}  ><span className="black-font">Nuevo Comedor</span></Button>
-                                    </Paper>
+                                   
+                                        <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => window.location.href = "/nuevoComedor"  }  ><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
+                                   
                                 </Grid>
                                 <Grid item xs={6} md={6} lg={6}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 180,
-                                        }}
-                                    >
-                                        <Button variant="contained" style={{ width: '100%', height: '100%' }}  onClick={ () => window.location.href = "/nuevaEncuesta"  }    > <span className="black-font">Nueva Encuesta</span></Button>
-                                    </Paper>
+                                   
+                                        <Button sx={{backgroundColor:'#8d75c6'}} variant="contained" style={{ width: '100%', height: '100%' }}  onClick={ () => window.location.href = "/nuevaEncuesta"  }    > <PollIcon style={{ fontSize: 60, }}/></Button>
+                                    
                                 </Grid>
 
                                 <Grid item xs={12}>
@@ -81,38 +70,16 @@ export default function Home(props) {
                                         <Table >
                                             <TableHead>
                                                 <TableRow>
-                                                    <div>
-                                                        <Typography variant="h6" id="tableTitle" component="div">
-                                                            Comedores
-                                                        </Typography>
-                                                    </div>
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
 
-                                                <Grid container spacing={3} style={{ marginBottom: '10px' }}>
-                                                    <Grid item xs={12} lg={12} md={12}>
-                                                        <Paper
-                                                            sx={{
-                                                                p: 2,
-                                                                display: 'flex',
-                                                                flexDirection: 'column',
-                                                                height: 240,
-                                                            }}
-                                                        >
-                                                            <Grid item xs={6}>
-                                                                <Typography variant="h6" id="tableTitle" component="div">
-                                                                    Comedor 1
-                                                                </Typography>
-
-                                                            </Grid>
-
-                                                        </Paper>
+                                                <Grid container spacing={3} style={{ marginBottom: '10px',marginTop:'0', marginLeft:'0',height:180 }}>
+                                                    
+                                                    <ComedorItem/>
 
 
-
-
-                                                    </Grid>
+                                                    
                                                 </Grid>
                                             </TableBody>
                                         </Table>
