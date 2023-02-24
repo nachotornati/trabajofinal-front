@@ -70,7 +70,7 @@ export const Carouselitem = ({ children, width, tipo }) => {
         <div className="carousel-item" style={{ width: width }}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} lg={12}>
-                    <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center' }} zeroMinWidth>
+                    <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center',wordBreak: 'break-word', whiteSpace : 'pre-wrap'}} >
                         {children}
                     </Typography>
                 </Grid>
@@ -146,6 +146,7 @@ const Carousel = ({ children }) => {
 
     const [activeIndex, setActiveIndex] = useState(0)
     const [percentage, setPercentage] = useState(0)
+    const [percentagez, setPercentagez] = useState(0)
 
     const updateIndex = (newIndex) => {
         if (newIndex < 0) {
@@ -155,6 +156,7 @@ const Carousel = ({ children }) => {
         }
         setActiveIndex(newIndex);
         setPercentage(newIndex * 100)
+        setPercentagez(newIndex)
         console.log(newIndex)
     }
 

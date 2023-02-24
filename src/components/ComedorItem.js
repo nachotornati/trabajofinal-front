@@ -26,7 +26,7 @@ export default function ComedorItem(props) {
 
     return (
 
-        <Grid container spacing={1}>
+        <Grid container spacing={0}>
 
             <Button style={{ width: '100%' }} onClick={() => window.location.href = "/comedor"}>
             <Grid item xs={8} lg={8} md={8}>

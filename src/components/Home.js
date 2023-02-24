@@ -74,13 +74,12 @@ export default function Home(props) {
                                             </TableHead>
                                             <TableBody>
 
-                                                <Grid container spacing={3} style={{ marginBottom: '10px',marginTop:'0', marginLeft:'0',height:180 }}>
+                                               
                                                     
                                                     <ComedorItem/>
-
-
                                                     
-                                                </Grid>
+                                                    <ComedorItem/>
+                                                
                                             </TableBody>
                                         </Table>
                                     </TableContainer>

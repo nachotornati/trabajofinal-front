@@ -40,22 +40,6 @@ export default function NuevoComedor(props) {
             >
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                     <Grid container spacing={2} >
-                        <Grid item xs={12}>
-                            <Paper
-                                sx={{
-                                    p: 2,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}
-                            >
-                                <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                                    Nuevo Comedor
-                                </Typography>
-
-                              
-                             
-                             </Paper>         
-                        </Grid>
                        <Grid item xs={12} style={{display:'flex', justifyContent:'center'}}>
                        <Paper sx={{ p: 2,width:'75%'}}>
                                 <ComedorForm/>

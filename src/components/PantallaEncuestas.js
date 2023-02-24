@@ -42,9 +42,9 @@ export default function PantallaEncuestas(props) {
                 <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                     <Grid container spacing={3} >
                         <Grid item xs={12} style={{display:'flex', justifyContent:'center',height:'100%'}}>
-                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column',width:'75%'}}>
+                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column',width:'100%'}}>
                                 <Carousel>
-                                    <Carouselitem tipo={'completar'}> ¿Cuantas personas comen en el comedor?</Carouselitem>
+                                    <Carouselitem tipo={'completar'}> ¿Cuantas personas comen en el comedor prueba 1 2 ce cejcaksjfsjdflkasjflkasjl?</Carouselitem>
                                     <Carouselitem tipo={'select'}> Tipo de ayuda</Carouselitem>
                                     <Carouselitem tipo={'checkbox'}>¿Hay ayudantes remunerados?</Carouselitem>
                                 </Carousel>
