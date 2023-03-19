@@ -1,22 +1,19 @@
 import React from 'react'
-import {useJsApiLoader, GoogleMap} from '@react-google-maps/api'
+import {useJsApiLoader, GoogleMap, useLoadScript} from '@react-google-maps/api'
 import { Box } from '@mui/system'
 import { useState } from 'react'
 import { Marker } from '@react-google-maps/api'
 
-const location = {
-    address: '1600 Amphitheatre Parkway, Mountain View, california.',
-    lat: 37.42216,
-    lng: -122.08427,
-  }
-
-const center = { lat: 48.8584, lng: 2.2945 }
 
 export default function Mapa(props){
 
+    //const center = {props.location.lat , props.location.lng}
+
+    const center = { lat: -34.593594671986146, lng: -58.39888790931125 }
+
     const [map, setMap] = useState(/** @type google.maps.Map */ (null))
 
-    const {isLoaded} = useJsApiLoader({
+    const {isLoaded} = useLoadScript({
         googleMapsApiKey : process.env.REACT_APP_GOOGLE_MAPS_API_KEY
     })
 
@@ -40,7 +37,7 @@ export default function Mapa(props){
             }}
             onLoad={map => setMap(map)}
           >
-            <Marker position={center} />
+            <Marker position={ {lat: -34.593594671986146, lng: -58.39888790931125} } />
            
           </GoogleMap>
         </Box> 

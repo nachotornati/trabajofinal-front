@@ -88,9 +88,9 @@ export const Navigator = () => {
             <div style={{ "width": "100%", "marginTop": "25px", "textAlign": "center" }}>
 
                 <img
-                    src="/fundacion-si-manuel-lozano (1).png"
-                    width="50"
-                    height="50"
+                    src="/fundacion-si-manuel-lozano.png"
+                    width="200"
+                    height="75"
                     className="d-inline-block align-top logo"
                     style={{ "margin": "auto" }}
                     alt="logo"
@@ -99,12 +99,14 @@ export const Navigator = () => {
 
             <List>
 
-                <NavigatorItem name={"Home"} icon={<HomeIcon sx={{ color: "#8d75c6" }} />} path={"/"} />
+                <NavigatorItem name={"Home"} icon={<HomeIcon sx={{ color: "#8d75c6" }} />} path={"/home"} />
                 
                 
             </List>
  
             <Divider sx={{ color: "white" }} />
+
+            <NavigatorItem name={"Cerrar Sesion"}  icon={<LogoutIcon sx={{ color: "#8d75c6" }} />} path={"/"} />
 
            
 

@@ -38,10 +38,10 @@ export default function NuevoComedor(props) {
                     overflow: 'auto',
                 }}
             >
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={2} >
-                       <Grid item xs={12} style={{display:'flex', justifyContent:'center'}}>
-                       <Paper sx={{ p: 2,width:'75%'}}>
+                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }} style={{height:'100%'}}>
+                    <Grid container spacing={2} style={{height:'100%'}} >
+                       <Grid item xs={12} style={{display:'flex', justifyContent:'center', height:'100%'}}>
+                       <Paper sx={{ p: 2,width:'60%',height:'40%'}} rounded >
                                 <ComedorForm/>
                         </Paper>
                        </Grid>

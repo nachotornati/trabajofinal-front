@@ -13,7 +13,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 
-export const Carouselitem = ({ children, width, tipo }) => {
+export const Carouselitem = ({ legend, tipo, children, width }) => {
 
     const [age, setAge] = React.useState('');
     const handleChange = (event) => {
@@ -64,73 +64,89 @@ export const Carouselitem = ({ children, width, tipo }) => {
         }
     }
 
+    const renderContent = (tipo) => {
+        switch (tipo) {
+            case "comment":
+                return (<Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                    <TextField style={{ width: '50%' }}></TextField>
+                </Grid>)
+            case "multiselect":
+                return (
+                    <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <FormControl style={{ width: '50%' }}>
+                            <InputLabel id="demo-simple-select-label">Age</InputLabel>
+                            <Select
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={age}
+                                label="Age"
+                                onChange={handleChange}
+                            >
+                                {/*options.map((option) => (
+                                            <MenuItem value={option.value}>{option.label}</MenuItem>
+                                        ))*/}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                )
+            case "numerical":
+                return (
+                    <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <TextField type="number"style={{ width: '50%' }}></TextField>
+                    </Grid>)
+
+            case "select_comment":
+                return (
+                    <>
+                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
+                            <FormControlLabel
+                                value="bottom"
+                                control={<Checkbox />}
+                                label="SI"
+                                labelPlacement="bottom"
+                                checked={isChecked}
+                                onChange={handleCheck}
+                            />
+                        </Grid>
+                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
+                            <FormControlLabel
+                                value="bottom"
+                                control={<Checkbox />}
+                                label="NO"
+                                labelPlacement="bottom"
+                                checked={isChecked2}
+                                onChange={handleCheck2}
+                            />
+                        </Grid>
+
+                        {isChecked ? (
+                            <Grid item xs={12} md={12} style={{ display: 'flex', justifyContent: 'center', paddingBottom: '24px' }} >
+                                <TextField style={{ width: '50%' }}></TextField></Grid>) : (null)
+
+                        }
+                    </>
+                )
+
+        }
+    }
+
+
+
+
+
 
 
     return (
         <div className="carousel-item" style={{ width: width }}>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={12} lg={12}>
-                    <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center',wordBreak: 'break-word', whiteSpace : 'pre-wrap'}} >
-                        {children}
+                    <Typography variant="h6" style={{ display: 'flex', justifyContent: 'center', wordBreak: 'normal', whiteSpace: 'pre-wrap' }} >
+                        {legend}
                     </Typography>
                 </Grid>
 
-                {
-                    tipo === "completar" ? (
-                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField style={{ width: '50%' }}></TextField>
-                        </Grid>) : (tipo === "select" ? (
-
-                            <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                                <FormControl style={{ width: '50%' }}>
-                                    <InputLabel id="demo-simple-select-label">Age</InputLabel>
-                                    <Select
-                                        labelId="demo-simple-select-label"
-                                        id="demo-simple-select"
-                                        value={age}
-                                        label="Age"
-                                        onChange={handleChange}
-                                    >
-                                        <MenuItem value={10}>Ten</MenuItem>
-                                        <MenuItem value={20}>Twenty</MenuItem>
-                                        <MenuItem value={30}>Thirty</MenuItem>
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        ) :
-                            <>
-                                {/* Tengo que agregar para que si es SI aparezca un cuadro */}
-                                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <FormControlLabel
-                                        value="bottom"
-                                        control={<Checkbox />}
-                                        label="SI"
-                                        labelPlacement="bottom"
-                                        checked={isChecked}
-                                        onChange={handleCheck}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                                    <FormControlLabel
-                                        value="bottom"
-                                        control={<Checkbox />}
-                                        label="NO"
-                                        labelPlacement="bottom"
-                                        checked={isChecked2}
-                                        onChange={handleCheck2}
-                                    />
-                                </Grid>
-
-                                {isChecked ? (
-                                    <Grid item xs={12} md={12} style={{ display: 'flex', justifyContent: 'center' ,paddingBottom:'24px'}} >
-                                        <TextField style={{ width: '50%' }}></TextField></Grid>) : (null)
-
-                                }
-                            </>
-                    )
-
-
-                }
+                {renderContent(tipo)}
             </Grid>
 
 
@@ -163,26 +179,26 @@ const Carousel = ({ children }) => {
     return (
         <Grid container spacing={2} className='carousel'>
             <Grid item xs={12} md={12} lg={12}>
-            <div className="inner" style={{ transform: 'translateX(-' + percentage + '%)' }}>
-                {React.Children.map(children, (child, index) => {
-                    return React.cloneElement(child, { width: '100%' })
-                })}
-            </div>
-            </Grid>
-
-            
-                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" onClick={() => updateIndex(activeIndex - 1)}>Atras</Button>
-                </Grid>
-                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
-                    <Button variant="contained" onClick={() => updateIndex(activeIndex + 1)}>Siguiente</Button>
-                </Grid>
-            
+                <div className="inner" style={{ transform: 'translateX(-' + percentage + '%)' }}>
+                    {React.Children.map(children, (child, index) => {
+                        return React.cloneElement(child, { width: '100%' })
+                    })}
+                </div>
             </Grid>
 
 
+            <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="contained" onClick={() => updateIndex(activeIndex - 1)}>Atras</Button>
+            </Grid>
+            <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
+                <Button variant="contained" onClick={() => updateIndex(activeIndex + 1)}>Siguiente</Button>
+            </Grid>
 
-        
+        </Grid>
+
+
+
+
     )
 }
 

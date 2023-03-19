@@ -16,7 +16,7 @@ export const NavigatorItem = (props) => {
                         <ListItemIcon>
                             {props.icon}
                         </ListItemIcon>
-                        <ListItemText primary={props.name} />
+                        <ListItemText style={{fontFamily: 'Anton',fontSize:'24',fontWeight:'400',textTransform:'uppercase'}} primary={props.name} />
                     </ListItemButton>
                     </Link>
                 </ListItem>

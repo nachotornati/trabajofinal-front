@@ -15,49 +15,81 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import EncuestaItem from './EncuestaItem';
-import { TableContainer, TablePagination } from '@mui/material'; 
-import Carousel, {Carouselitem} from "./Carousel"
-
+import { TableContainer, TablePagination } from '@mui/material';
+import Carousel, { Carouselitem } from "./Carousel"
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const mdTheme = createTheme();
 
 export default function PantallaEncuestas(props) {
-    return(
 
-        <ThemeProvider theme={mdTheme}>
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <Box
-                component="main"
-                sx={{
-                    backgroundColor: (theme) =>
-                        theme.palette.mode === 'light'
-                            ? theme.palette.grey[100]
-                            : theme.palette.grey[900],
-                    flexGrow: 1,
-                    height: '100vh',
-                    overflow: 'auto',
-                }}
-            >
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                    <Grid container spacing={3} >
-                        <Grid item xs={12} style={{display:'flex', justifyContent:'center',height:'100%'}}>
-                            <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column',width:'100%'}}>
-                                <Carousel>
-                                    <Carouselitem tipo={'completar'}> ¿Cuantas personas comen en el comedor prueba 1 2 ce cejcaksjfsjdflkasjflkasjl?</Carouselitem>
-                                    <Carouselitem tipo={'select'}> Tipo de ayuda</Carouselitem>
-                                    <Carouselitem tipo={'checkbox'}>¿Hay ayudantes remunerados?</Carouselitem>
-                                </Carousel>
+    const [encuesta, setEncuesta] = useState([])
 
-                            </Paper>
-                        </Grid>    
-                    </Grid>
-                </Container>
-            </Box>
-        </Box>
-    </ThemeProvider>
+    const getEncuestas = () => {
+        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey', {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                
+                setEncuesta(res.questions)
 
 
-    );
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
 
-}
+    }
+
+    useEffect(() => {
+        getEncuestas()
+    }, [])
+
+
+        return (
+
+            <ThemeProvider theme={mdTheme}>
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <Box
+                        component="main"
+                        sx={{
+                            backgroundColor: (theme) =>
+                                theme.palette.mode === 'light'
+                                    ? theme.palette.grey[100]
+                                    : theme.palette.grey[900],
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
+
+                        {/* Pedirle a chona que traiga una pregunta para terminar encuesta*/}
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                            <Grid container spacing={3} >
+                                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
+                                        <Carousel>
+                                            
+                                            {encuesta.map((pregunta) => (
+                                                <Carouselitem tipo={pregunta.type} legend={pregunta.legend} />
+                                            ))}
+
+                                        </Carousel>
+
+                                    </Paper>
+                                </Grid>
+                            </Grid>
+                        </Container>
+                    </Box>
+                </Box>
+            </ThemeProvider>
+
+
+        );
+
+    }

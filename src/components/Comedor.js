@@ -25,11 +25,10 @@ const mdTheme = createTheme();
 export default function Comedor(props) {
 
     const location = {
-        address: '1600 Amphitheatre Parkway, Mountain View, california.',
-        lat: 37.42216,
-        lng: -122.08427,
-      } 
-
+        address: 'Azcuenaga 1295, Buenos Aires, Argentina',
+        lat: -34.593594671986146,
+        lng: -58.39888790931125,
+      }
 
     return (
 

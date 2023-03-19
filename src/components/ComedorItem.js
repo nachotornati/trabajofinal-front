@@ -23,7 +23,7 @@ const mdTheme = createTheme();
 
 export default function ComedorItem(props) {
 
-
+    console.log(props)
     return (
 
         <Grid container spacing={0}>
@@ -59,16 +59,16 @@ export default function ComedorItem(props) {
                 >
                     <Grid item xs>
                         <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
-                            Comedor 1
+                            {props.nombre}
                         </Typography>
                     </Grid>
                     <Grid item xs>
                         <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
-                            Direccion : Oro Negro 93
+                            {props.direccion}
                         </Typography>
                     </Grid>
                     
-                    <Grid item xs={ 12} style={{display:'flex',justifyContent:'center'}}>
+                    <Grid item xs>
                         <Button><InfoIcon sx={{color:'#8d75c6',fontSize: 40} }/></Button>
                     </Grid>
                     
