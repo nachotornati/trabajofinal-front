@@ -19,12 +19,14 @@ import { TableContainer, TablePagination } from '@mui/material';
 import Carousel, { Carouselitem } from "./Carousel"
 import { useState } from 'react';
 import { useEffect } from 'react';
+import Survey from './Carousel';
 
 const mdTheme = createTheme();
 
 export default function PantallaEncuestas(props) {
 
     const [encuesta, setEncuesta] = useState([])
+    
 
     const getEncuestas = () => {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey', {
@@ -35,8 +37,7 @@ export default function PantallaEncuestas(props) {
             .then((response) => response.json())
             .then((res) => {
                 
-                setEncuesta(res.questions)
-
+                setEncuesta(res)        
 
             })
             .catch((err) => {
@@ -73,13 +74,12 @@ export default function PantallaEncuestas(props) {
                             <Grid container spacing={3} >
                                 <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
-                                        <Carousel>
+                                        
                                             
-                                            {encuesta.map((pregunta) => (
-                                                <Carouselitem tipo={pregunta.type} legend={pregunta.legend} />
-                                            ))}
+                                            
+                                           {encuesta.length != 0 ? < Survey survey={encuesta}/> :'cargando encuesta...'}
 
-                                        </Carousel>
+                                        
 
                                     </Paper>
                                 </Grid>
