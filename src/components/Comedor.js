@@ -18,6 +18,9 @@ import Mapa from './Mapa';
 import EncuestaItem from './EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import GraficoLinea from './GraficoLinea';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const mdTheme = createTheme();
 
@@ -28,7 +31,31 @@ export default function Comedor(props) {
         address: 'Azcuenaga 1295, Buenos Aires, Argentina',
         lat: -34.593594671986146,
         lng: -58.39888790931125,
-      }
+    }
+
+    const [comedor, setComedor] = useState([])
+    const {id} = useParams()
+
+    console.log("id",id)
+
+
+    const getComedor= () => {
+        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/comedor', {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                console.log(res)
+                setComedor(res)
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    
+    }
+
 
     return (
 
@@ -48,17 +75,97 @@ export default function Comedor(props) {
                     }}
                 >
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={2} >
+                        <Grid container spacing={2}>
+                            {/* <Grid container spacing={0}>
+                                <Grid id="target"item xs={8} lg={8} md={8}>
+
+
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            height: 240,
+                                            width: '100%',
+                                            backgroundColor: '#a4c4be'
+                                        }}
+                                    >
+
+
+                                    </Paper>
+                                </Grid>
+                                <Grid item xs={4} lg={4} md={4}>
+                                    <Paper
+                                        sx={{
+                                            p: 2,
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            height: 240,
+                                            width: '100%',
+                                        }}
+                                    >
+                                    </Paper>
+                                </Grid>
+                            </Grid> */}
+
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
                                         p: 2,
                                         display: 'flex',
                                         flexDirection: 'column',
-                                        height: '240px'
-                                    }}>
-
+                                    }}
+                                >
+                                    <Typography variant="h6" gutterBottom component="div">
+                                        Comedor Tengo Hambre
+                                    </Typography>
                                 </Paper>
+                            </Grid>
+
+
+                            <Grid item xs={6}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >   
+                                <Button component={Link} to={`/comedor/${id}/encuestas`}>
+                                        Ver encuestas
+                                    </Button>
+                                </Paper>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
+                                    <Button>
+                                        Crear encuestas
+                                    </Button>
+                                </Paper>
+                            </Grid>
+
+
+
+                            <Grid item xs={12}>
+                                <Paper
+                                    sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}
+                                >
+
+                                <Typography variant="h6" gutterBottom component="div">
+                                    Grafico
+                                </Typography>
+                                </Paper>
+                                {/*<GraficoLinea/>*/}
                             </Grid>
                             <Grid item xs={12}>
                                 <Paper
@@ -68,24 +175,11 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                   
-
-                                </Paper>
-                                    {/*<GraficoLinea/>*/}
-                            </Grid>
-                            <Grid item xs={12}>
-                                <Paper
-                                    sx={{
-                                        p: 2,
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                    }}
-                                >
-                                    <Mapa location={location}/>
+                                    <Mapa location={location} />
                                 </Paper>
                             </Grid>
-
                         </Grid>
+
                     </Container>
                 </Box>
             </Box>

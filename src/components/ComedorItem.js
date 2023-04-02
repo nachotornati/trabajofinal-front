@@ -18,17 +18,18 @@ import ComedorForm from './ComedorForm';
 import EncuestaItem from './EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import { useDispatch } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 
 const mdTheme = createTheme();
 
 export default function ComedorItem(props) {
-
-    console.log(props)
+    
+    console.log("id",props.id)
+   
     return (
 
         <Grid container spacing={0}>
-
-            <Button style={{ width: '100%' }} onClick={() => window.location.href = "/comedor"}>
             <Grid item xs={8} lg={8} md={8}>
                         
                         
@@ -47,7 +48,7 @@ export default function ComedorItem(props) {
                 </Paper>
             </Grid>
             
-            <Grid item xs={6} lg={6} md={6}>
+            <Grid item xs={4} lg={4} md={4}>
                 <Paper
                     sx={{
                         p: 2,
@@ -57,19 +58,21 @@ export default function ComedorItem(props) {
                         width: '100%',
                     }}
                 >
-                    <Grid item xs>
+                    <Grid item xs sx={{ textAlign: 'center' }}>
                         <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
                             {props.nombre}
                         </Typography>
                     </Grid>
-                    <Grid item xs>
+                    <Grid item xs sx={{ textAlign: 'center' }}>
                         <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
                             {props.direccion}
                         </Typography>
                     </Grid>
                     
-                    <Grid item xs>
-                        <Button><InfoIcon sx={{color:'#8d75c6',fontSize: 40} }/></Button>
+                    <Grid item xs sx={{ textAlign: 'center' }}>
+                        
+                    <Button component={Link} to={`/comedor/${props.id}`}><InfoIcon sx={{color:'#8d75c6',fontSize: 40} }/></Button>
+                        
                     </Grid>
                     
                         
@@ -79,7 +82,7 @@ export default function ComedorItem(props) {
                 </Paper>
             </Grid>
 
-            </Button>
+            
 
 
 

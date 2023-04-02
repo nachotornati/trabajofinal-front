@@ -16,13 +16,15 @@ import TableRow from '@mui/material/TableRow';
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import ComedorItem from './ComedorItem';
-import { TableContainer, TablePagination } from '@mui/material';
+import { TableCell, TableContainer, TablePagination, Typography } from '@mui/material';
 import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 
 const mdTheme = createTheme();
-export default function Home(props) {
+export default function EncuestasHistoricas(props) {
 
+    const { id } = useParams();// uso el id para buscar las encuestas del comedor
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [page, setPage] = React.useState(0);
     const [comedores, setComedores]= React.useState()
@@ -39,7 +41,7 @@ export default function Home(props) {
         setPage(0);
     };
 
-    const getComedores = () => {
+    const getEncuestas = () => {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/dinners', {
             headers: {
                 'Content-Type': 'application/json',
@@ -58,7 +60,7 @@ export default function Home(props) {
     }
 
     useEffect(() => {
-        getComedores()
+        //getEncuestas()
     }, [])
 
     return (
@@ -80,15 +82,10 @@ export default function Home(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                <Grid item xs={6} md={6} lg={6}>
-                                   
-                                        <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => window.location.href = "/nuevo-comedor"  }  ><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
-                                   
-                                </Grid>
-                                <Grid item xs={6} md={6} lg={6}>
-                                   
-                                        <Button sx={{backgroundColor:'#8d75c6'}} variant="contained" style={{ width: '100%', height: '100%' }}  onClick={ () => window.location.href = "/nueva-encuesta"  }    > <PollIcon style={{ fontSize: 60, }}/></Button>
-                                    
+                                <Grid item xs={12}>
+                                    <Typography variant="h4" component="div" gutterBottom>
+                                        Encuestas Históricas del comedor Tengo Hambre
+                                    </Typography>
                                 </Grid>
 
                                 <Grid item xs={12}>
@@ -96,13 +93,35 @@ export default function Home(props) {
                                         <Table >
                                             <TableHead>
                                                 <TableRow>
+                                                    <TableCell>Fecha</TableCell>
+                                                    <TableCell>Tipo</TableCell>
+                                                    <TableCell>Actions</TableCell>
+                                                    
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {comedores?.map((comedor) => (
+                                                {/* {comedores?.map((comedor) => (
                                                     <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name  } />
                                                   
-                                                ))}
+                                                ))} */}
+                                                <TableRow>
+                                                
+                                                    <TableCell>22/06/22</TableCell>
+                                                    <TableCell>General</TableCell>
+                                                    <TableCell>
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            size="small"
+                                                            startIcon={<PollIcon />}
+                                                        >
+                                                            Ver
+                                                        </Button>
+
+                                                    </TableCell>
+                                                    
+                                                
+                                                </TableRow>
                                                 
                                                
                                                 

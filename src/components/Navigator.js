@@ -14,6 +14,7 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
 
 //import SavingsIcon from '@mui/icons-material/Savings'
@@ -89,8 +90,8 @@ export const Navigator = () => {
 
                 <img
                     src="/fundacion-si-manuel-lozano.png"
-                    width="200"
-                    height="75"
+                    width="200 !important"
+                    height="75 !important"
                     className="d-inline-block align-top logo"
                     style={{ "margin": "auto" }}
                     alt="logo"
@@ -100,7 +101,7 @@ export const Navigator = () => {
             <List>
 
                 <NavigatorItem name={"Home"} icon={<HomeIcon sx={{ color: "#8d75c6" }} />} path={"/home"} />
-                
+                <NavigatorItem name={"Gestion Usuarios"} icon={<SupervisorAccountIcon sx={{ color: "#8d75c6" }} />} path={"/admin"} />
                 
             </List>
  
@@ -131,7 +132,7 @@ export const Navigator = () => {
                         
                     </Navbar.Brand>
                     <React.Fragment key={"left"} >
-                        <Button className="custom-font"  disableRipple variant="outlined" style={{border:0}} onClick={toggleDrawer("left", true)}><MenuIcon sx={{color:'#8d75c6', fontSize:40}} /></Button>
+                        <Button className="custom-font"  disableRipple variant="outlined" style={{border:0}} onClick={toggleDrawer("left", true)}><MenuIcon sx={{color:'#8d75c6',display: 'flex', flexGrow: 1}} /></Button>
                         
                         <Drawer
                             anchor={"left"}

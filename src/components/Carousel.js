@@ -8,7 +8,6 @@ import { InputLabel } from '@material-ui/core';
 import { Select } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { Button } from '@material-ui/core';
-import { Input } from '@material-ui/core';
 import { Typography } from '@mui/material';
 
 
@@ -17,7 +16,6 @@ const Survey = ({ survey }) => {
     console.log(survey)
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [encuesta, setEncuesta] = useState({ id_encuesta: survey._id })
     const [answers, setAnswers] = useState({});
     const [isChecked, setIsChecked] = useState(false);
     const [isChecked2, setIsChecked2] = useState(false);
@@ -247,8 +245,8 @@ const Survey = ({ survey }) => {
 
         return (
 
-
-            <Grid container spacing={2} className='carousel'>
+            
+            <Grid container spacing={2} >
                 <Grid item xs={12} md={12} lg={12}>
                     <div className="carousel-item" >
                         <Grid container spacing={3}>

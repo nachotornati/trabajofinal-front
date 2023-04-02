@@ -52,7 +52,7 @@ export default function PantallaEncuestas(props) {
 
 
         return (
-
+            <>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{ display: 'flex' }}>
                     <CssBaseline />
@@ -69,9 +69,9 @@ export default function PantallaEncuestas(props) {
                         }}
                     >
 
-                        {/* Pedirle a chona que traiga una pregunta para terminar encuesta*/}
+                        
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                            <Grid container spacing={3} >
+                            <Grid container spacing={1} >
                                 <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
                                         
@@ -89,7 +89,7 @@ export default function PantallaEncuestas(props) {
                 </Box>
             </ThemeProvider>
 
-
+                        </>
         );
 
     }
