@@ -14,7 +14,7 @@ export default function Mapa(props){
     const [map, setMap] = useState(/** @type google.maps.Map */ (null))
 
     const {isLoaded} = useLoadScript({
-        googleMapsApiKey : process.env.REACT_APP_GOOGLE_MAPS_API_KEY
+        googleMapsApiKey : "AIzaSyBDqZnbqvEV_yACNbuxh2srQHOjQ3_UYDc"
     })
 
     if(!isLoaded){
