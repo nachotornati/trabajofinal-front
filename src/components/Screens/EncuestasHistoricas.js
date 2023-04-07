@@ -15,10 +15,17 @@ import TableRow from '@mui/material/TableRow';
 
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
-import ComedorItem from './ComedorItem';
+import ComedorItem from '../ComedorItem';
 import { TableCell, TableContainer, TablePagination, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import {Link} from '@mui/material';
+import {Paper} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
+
 
 
 const mdTheme = createTheme();
@@ -27,7 +34,8 @@ export default function EncuestasHistoricas(props) {
     const { id } = useParams();// uso el id para buscar las encuestas del comedor
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [page, setPage] = React.useState(0);
-    const [comedores, setComedores]= React.useState()
+    const [encuestas, setEncuestas]= React.useState([])
+   
   
     
     
@@ -42,15 +50,16 @@ export default function EncuestasHistoricas(props) {
     };
 
     const getEncuestas = () => {
-        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/dinners', {
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
         })
             .then((response) => response.json())
             .then((res) => {
-                console.log(res)
-                setComedores(res.dinners)
+                
+                setEncuestas(res)
+               
                 
             })
             .catch((err) => {
@@ -60,8 +69,22 @@ export default function EncuestasHistoricas(props) {
     }
 
     useEffect(() => {
-        //getEncuestas()
+        getEncuestas()
     }, [])
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
+      
+        return `${day}/${month}/${year}`;
+    
+    }
+
+    const capitalizeFirstLetter= (str) =>{
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
 
     return (
         <>
@@ -89,33 +112,45 @@ export default function EncuestasHistoricas(props) {
                                 </Grid>
 
                                 <Grid item xs={12}>
+                                    <Paper>
                                     <TableContainer>
                                         <Table >
                                             <TableHead>
                                                 <TableRow>
                                                     <TableCell>Fecha</TableCell>
                                                     <TableCell>Tipo</TableCell>
-                                                    <TableCell>Actions</TableCell>
+                                                    <TableCell style={{textAlign:'center'}} >Hecha Por</TableCell>
+                                                    <TableCell style={{textAlign:'center'}}>Actions</TableCell>
                                                     
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {/* {comedores?.map((comedor) => (
-                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name  } />
+                                                {encuestas?.map((encuesta) => (
+                                                    
                                                   
-                                                ))} */}
-                                                <TableRow>
+                                               
+                                                <TableRow key={encuesta.id} >
                                                 
-                                                    <TableCell>22/06/22</TableCell>
-                                                    <TableCell>General</TableCell>
-                                                    <TableCell>
+                                                    
+                                                    <TableCell>{encuesta.date}</TableCell>
+                                                    <TableCell>{encuesta.survey_type}</TableCell>
+                                                    <TableCell >{encuesta.surver}</TableCell>
+                                                    <TableCell style={{display:'flex',justifyContent:'space-evenly'}} >
                                                         <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            size="small"
-                                                            startIcon={<PollIcon />}
+                                                            
+                                                            onClick={() => window.location.href= `/comedor/${id}/encuesta/${encuesta.id}` }
+                                                           
+
                                                         >
-                                                            Ver
+                                                            <VisibilityIcon/>
+                                                        </Button>
+                                                        <Button
+                                                            onClick={() => window.location.href= `/comedor/${id}/editar-encuesta/${encuesta.id}` }
+                                                        >
+                                                            <EditIcon />
+                                                        </Button>
+                                                        <Button>
+                                                            <DeleteIcon />
                                                         </Button>
 
                                                     </TableCell>
@@ -123,7 +158,7 @@ export default function EncuestasHistoricas(props) {
                                                 
                                                 </TableRow>
                                                 
-                                               
+                                                ))} 
                                                 
                                             </TableBody>
                                         </Table>
@@ -138,6 +173,7 @@ export default function EncuestasHistoricas(props) {
                                         rowsPerPage={rowsPerPage}
                                         onRowsPerPageChange={handleChangeRowsPerPage}
                                     />
+                                    </Paper>
                                 </Grid>
                             </Grid>
                         </Container>

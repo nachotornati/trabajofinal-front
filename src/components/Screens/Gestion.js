@@ -31,7 +31,7 @@ import { FormControl } from '@material-ui/core';
 import { InputLabel } from '@material-ui/core';
 import { Select } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
-import "../assets/scss/modal.scss"
+
 const mdTheme = createTheme();
 
 export default function Gestion(props) {
@@ -112,18 +112,7 @@ export default function Gestion(props) {
     }
 
 
-    // Función para actualizar la contraseña del usuario seleccionado
-    const updatePassword = (newPassword) => {
-        // Lógica para actualizar la contraseña del usuario en la base de datos o API
-        setPasswordDialogOpen(false);
-    }
-
-    // Función para eliminar el usuario seleccionado
-    const deleteUser = () => {
-        // Lógica para eliminar el usuario de la base de datos o API
-        setSelectedUser(null);
-    }
-
+  
     // Función para crear un nuevo usuario
     const createUser = (userData) => {
         // Lógica para crear un nuevo usuario en la base de datos o API
@@ -194,8 +183,9 @@ export default function Gestion(props) {
           password: password,
           roles: selectedValues,
         };
-        console.log(updatedUser)
-        console.log(selectedUser.id)
+
+        
+        
         fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/auth/users/${selectedUser.id}`, {
           method: "PUT",
           headers: {
@@ -211,7 +201,7 @@ export default function Gestion(props) {
           })
           .then((data) => {
             // Update the user's information in the state
-            const updatedUsers = users.map((u) => (u.id === data.id ? data : u));
+            const updatedUsers = users.map(u => u.id === data.id ? data : u);
             setUsers(updatedUsers);
             setSelectedUser(null);
           })

@@ -14,14 +14,16 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import Mapa from './Mapa';
-import EncuestaItem from './EncuestaItem';
+import Mapa from '../Mapa';
+import EncuestaItem from '../EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
-import GraficoLinea from './GraficoLinea';
+import GraficoLinea from '../GraficoLinea';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-
+import { useEffect } from 'react';
+import CrearEncuestaModal from '../Modals/CrearEncuestaModal';
+import ComedorModal from '../Modals/ComedorModal';
 const mdTheme = createTheme();
 
 
@@ -34,12 +36,37 @@ export default function Comedor(props) {
     }
 
     const [comedor, setComedor] = useState([])
-    const {id} = useParams()
+    const { id } = useParams()
+    const [editComedorModalOpen, setEditComedorModalOpen] = useState(false)
+    const [createSurveyModalOpen, setCreateSurveyModalOpen] = useState(false)
+    const [tipos, setTipos] = useState([]);
+    const handleModalClose=()=>{
+        setEditComedorModalOpen(false)
+    }
+    const handleSurveyClose = () => {
+        setCreateSurveyModalOpen(false)
+    }
 
-    console.log("id",id)
+    const getTiposEncuesta = () => {
+        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey/types', {
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+            
+                setTipos(res.types)
+               
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+
+    }
 
 
-    const getComedor= () => {
+    const getComedor = () => {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/comedor', {
             headers: {
                 'Content-Type': 'application/json',
@@ -53,8 +80,15 @@ export default function Comedor(props) {
             .catch((err) => {
                 console.log(err.message);
             });
-    
+
     }
+
+    useEffect(() => {
+
+        getTiposEncuesta()
+    }, [])
+
+
 
 
     return (
@@ -62,6 +96,8 @@ export default function Comedor(props) {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
+                <CrearEncuestaModal tipos={tipos} open={createSurveyModalOpen} handleCloseModal={handleSurveyClose} id={id} />
+                <ComedorModal open={editComedorModalOpen} handleCloseModal={handleModalClose} id={id}/>
                 <Box
                     component="main"
                     sx={{
@@ -75,7 +111,7 @@ export default function Comedor(props) {
                     }}
                 >
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={2}>
+                        <Grid container spacing={1}>
                             {/* <Grid container spacing={0}>
                                 <Grid id="target"item xs={8} lg={8} md={8}>
 
@@ -116,9 +152,21 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Typography variant="h6" gutterBottom component="div">
-                                        Comedor Tengo Hambre
-                                    </Typography>
+                                    <Grid container justifyContent="space-between">
+                                        <Grid item xs={6} textAlign="left">
+                                            <Typography variant="h6" gutterBottom component="div">
+                                                Comedor Tengo Hambre
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={6} textAlign='right' >
+                                            <Button onClick={() => {
+                                            
+                                            setEditComedorModalOpen(true)
+                                            }}>
+                                                Editar
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
                                 </Paper>
                             </Grid>
 
@@ -130,8 +178,8 @@ export default function Comedor(props) {
                                         display: 'flex',
                                         flexDirection: 'column',
                                     }}
-                                >   
-                                <Button component={Link} to={`/comedor/${id}/encuestas`}>
+                                >
+                                    <Button component={Link} to={`/comedor/${id}/encuestas`}>
                                         Ver encuestas
                                     </Button>
                                 </Paper>
@@ -144,15 +192,17 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Button>
-                                        Crear encuestas
+                                    <Button
+                                        onClick={() => {
+                                            setCreateSurveyModalOpen(true)
+                                        }}>
+                                        Crear encuesta
                                     </Button>
+
                                 </Paper>
+
                             </Grid>
-
-
-
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Paper
                                     sx={{
                                         p: 2,
@@ -161,12 +211,13 @@ export default function Comedor(props) {
                                     }}
                                 >
 
-                                <Typography variant="h6" gutterBottom component="div">
-                                    Grafico
-                                </Typography>
+                                    <Typography variant="h6" gutterBottom component="div">
+                                        Grafico
+                                    </Typography>
                                 </Paper>
-                                {/*<GraficoLinea/>*/}
-                            </Grid>
+                                {/*<GraficoLinea/>
+                            </Grid> 
+                            */}
                             <Grid item xs={12}>
                                 <Paper
                                     sx={{
@@ -181,8 +232,12 @@ export default function Comedor(props) {
                         </Grid>
 
                     </Container>
+
                 </Box>
+
             </Box>
         </ThemeProvider>
+
+
     );
 }

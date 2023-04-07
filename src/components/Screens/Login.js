@@ -7,17 +7,19 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-
+import { Button } from "@mui/material";
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import { useState } from "react";
 import { ThemeProvider } from '@mui/material/styles';
-import NavigatorWithButton from "./NavigatorWithButton";
+import NavigatorWithButton from "../NavigatorWithButton";
+import { useContext } from "react";
+import { AuthContext } from "../Context/AuthContext";
 
 
 export default function Login(props) {
-    const [email, setEmail] = useState('');
+    const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     //const [openVerifyEmailMessage, setopenVerifyEmailMessage] = React.useState(false);
     //const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
@@ -26,7 +28,7 @@ export default function Login(props) {
     //const [loading, setLoading] = React.useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
-    
+    const [loading, setLoading] = React.useState(false);
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -35,6 +37,96 @@ export default function Login(props) {
     const handleMouseDownPassword = (event) => {
         event.preventDefault();
     };
+
+    const { dispatch } = useContext(AuthContext);
+
+    const handleLogin = (e) => {
+        e.preventDefault()
+        setLoading(true);
+        if (username === '' || password === '') {
+            //showCompleteAllFieldError()
+            setLoading(false);
+        }
+        else {
+
+            fetch('https://trabajo-final-backend-7ezk.onrender.com/api/auth/signin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+
+
+             })
+            })
+                .then((response) => response.json())
+                .then((res) => {
+                    console.log(res)
+                    const user = {
+                        username: res.username,
+                        roles: res.roles,
+                        accessToken: res.accessToken,
+                    }
+                    if(res.accessToken != null){
+                        dispatch({ type: "LOGIN", payload: user })
+                        window.location.href = "/home"
+                    }
+                    else{
+                        alert("Usuario o contraseña incorrectos")
+                    }
+
+                })
+                // .then((response) => {
+                    
+                //     //console.log(response.json())
+                //     let res = response.json()
+                //     console.log(res)
+                //     const user = {
+                //          username: res.username,
+                //          roles: res.roles,
+                //          accessToken: res.accessToken,
+                //      }
+
+                //     console.log(user)
+                //     if (response.status === 200) {
+                //         dispatch({ type: "LOGIN", payload: user })
+                //         //window.location.href = "/home"
+                        
+                //     }   
+                //     else {
+                //         //showVerifyEmailMessage()
+                //     }
+                // })
+                // .then((userCredential) => {
+                //     console.log(userCredential)
+
+                //     if (userCredential.status === 200) {
+                //         dispatch({ type: "LOGIN", payload: {} })
+                //         //window.location.href = "/home"
+                //     }
+                //     else {
+                //         //showVerifyEmailMessage()
+                //     }
+
+                //     setLoading(false)   
+
+                // })
+                .catch((error) => {
+
+                    if (error.code === 'auth/invalid-email') {
+                        //showInvalidEmailError()
+                    }
+                    if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+                        //showInvalidUserError()
+                    }
+                    setLoading(false)
+
+                });
+
+        }
+    }
 
 
     return (
@@ -72,7 +164,7 @@ export default function Login(props) {
                                         label="Correo Electrónico"
                                         id="outlined-start-adornment"
                                         sx={{ m: 1, width: '25ch' }}
-                                        onChange={(e) => { setEmail(e.target.value) }}
+                                        onChange={(e) => { setUsername(e.target.value) }}
                                     />
                                     <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined" >
                                         <InputLabel htmlFor="outlined-adornment-password">Contraseña</InputLabel>
@@ -131,22 +223,21 @@ export default function Login(props) {
                                 </div> */}
 
                                 <div className="text-center">
-                                    <ThemeProvider >
+                                   
 
-                                        {/* <LoadingButton
+                                        <Button
                                             size="medium"
                                             onClick={handleLogin}
                                             loading={loading}
                                             variant="contained"
                                         >
                                             Iniciar Sesión
-                                        </LoadingButton> */}
-                                    </ThemeProvider>
+                                        </Button> 
+                                    
                                 </div>
 
                             </Box>
                             
-                            <div style={{display:'flex',justifyContent:'center',alignItems:'center', margin:'auto'}}><Link style={{ color: '#5cb377' }} className="text-link" to="/forgotPassword">Olvide mi contraseña </Link></div>
                         </div>
                     </div>
                 </div>

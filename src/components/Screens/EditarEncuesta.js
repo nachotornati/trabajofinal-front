@@ -14,22 +14,31 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import EncuestaItem from './EncuestaItem';
+import EncuestaItem from '../EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
-import Carousel, { Carouselitem } from "./Carousel"
+import Carousel, { Carouselitem } from "../Carousel-Encuestas/Survey"
 import { useState } from 'react';
 import { useEffect } from 'react';
-import Survey from './Carousel';
-
+import { useParams } from 'react-router-dom';
+import EditarSurveyCarousel from '../Carousel-Encuestas/EditarSurveyCarousel'
 const mdTheme = createTheme();
 
-export default function PantallaEncuestas(props) {
+export default function EditarEncuesta(props) {
 
-    const [encuesta, setEncuesta] = useState([])
     
 
-    const getEncuestas = () => {
-        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey', {
+    const [answers, setAnswers] = useState([])
+    const [comedor, setComedor] = useState("")
+    const { id, idEncuesta } = useParams()
+   
+    
+
+
+
+    
+
+    const getEncuesta = () => {
+        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/' + idEncuesta, {
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -37,17 +46,17 @@ export default function PantallaEncuestas(props) {
             .then((response) => response.json())
             .then((res) => {
                 
-                setEncuesta(res)        
-
+                setAnswers(res);
+                
             })
             .catch((err) => {
                 console.log(err.message);
             });
-
     }
 
+
     useEffect(() => {
-        getEncuestas()
+        getEncuesta()
     }, [])
 
 
@@ -75,11 +84,8 @@ export default function PantallaEncuestas(props) {
                                 <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
                                         
-                                            
-                                            
-                                           {encuesta.length != 0 ? < Survey survey={encuesta}/> :'cargando encuesta...'}
+                                        {answers.length != 0 ? < EditarSurveyCarousel comedor={comedor} id={idEncuesta} answers={answers}/> :'cargando encuesta...'}
 
-                                        
 
                                     </Paper>
                                 </Grid>

@@ -12,24 +12,47 @@ import TableBody from '@mui/material/TableBody';
 
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
-import ComedorItem from './ComedorItem';
+import ComedorItem from '../ComedorItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import { useEffect } from 'react';
+import { useState } from 'react';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import { TextField } from '@mui/material';
 
+import { useContext } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 
 const mdTheme = createTheme();
 export default function Home(props) {
 
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    const [page, setPage] = React.useState(0);
-    const [comedores, setComedores]= React.useState()
-  
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [page, setPage] = useState(0);
+    const [comedores, setComedores] = useState([])
+    const [tableComedores, setTableComedores] = useState([]);
+    const [busqueda, setBusqueda] = useState("")
+    const { currentUser } = useContext(AuthContext);
+
     
-    
-   
+
+    const handleChangeBusqueda = (event) => {
+        setBusqueda(event.target.value)
+        filtrar(event.target.value)
+    }
+
+    const filtrar = (terminoBusqueda) => {
+        var resultadoTablaBusqueda = tableComedores.filter((elemento) => {
+
+            if (elemento.name.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+                || elemento.address.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())) {
+                return elemento
+            }
+        })
+        setComedores(resultadoTablaBusqueda)
+    }
+
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -47,9 +70,11 @@ export default function Home(props) {
         })
             .then((response) => response.json())
             .then((res) => {
-                console.log(res)
-                setComedores(res.dinners)
                 
+                setComedores(res.dinners)
+                setTableComedores(res.dinners)
+                
+
             })
             .catch((err) => {
                 console.log(err.message);
@@ -80,7 +105,8 @@ export default function Home(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                <Grid item xs={6} md={6} lg={6}>
+                                
+                                 <Grid item xs={6} md={6} lg={6}>
                                    
                                         <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => window.location.href = "/nuevo-comedor"  }  ><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
                                    
@@ -89,6 +115,10 @@ export default function Home(props) {
                                    
                                         <Button sx={{backgroundColor:'#8d75c6'}} variant="contained" style={{ width: '100%', height: '100%' }}  onClick={ () => window.location.href = "/nueva-encuesta"  }    > <PollIcon style={{ fontSize: 60, }}/></Button>
                                     
+                                </Grid> 
+                                <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                    <TextField value={busqueda} placeholder="Busqueda por usuario o mail" style={{ marginRight: '8px', width: '100%' }} onChange={handleChangeBusqueda} />
+                                    <Button><PersonSearchIcon /></Button>
                                 </Grid>
 
                                 <Grid item xs={12}>
@@ -99,13 +129,16 @@ export default function Home(props) {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {comedores?.map((comedor) => (
-                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name  } />
-                                                  
+                                                
+                                                {comedores && comedores.map((comedor) => (
+                                                    
+                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name}/>
+
                                                 ))}
                                                 
-                                               
-                                                
+
+
+
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
@@ -120,6 +153,7 @@ export default function Home(props) {
                                         onRowsPerPageChange={handleChangeRowsPerPage}
                                     />
                                 </Grid>
+                                
                             </Grid>
                         </Container>
                     </Box>
