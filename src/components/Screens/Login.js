@@ -66,6 +66,7 @@ export default function Login(props) {
                     console.log(res)
                     const user = {
                         username: res.username,
+                        id: res.id,
                         roles: res.roles,
                         accessToken: res.accessToken,
                     }

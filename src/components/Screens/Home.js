@@ -14,15 +14,16 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
-import ComedorItem from '../ComedorItem';
+import ComedorItem from './ComedorItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import { TextField } from '@mui/material';
-
+import { ComedorContext } from '../Context/ComedorContext';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
+import CrearComedorModal from '../CrearComedorModal';
 
 const mdTheme = createTheme();
 export default function Home(props) {
@@ -32,13 +33,26 @@ export default function Home(props) {
     const [comedores, setComedores] = useState([])
     const [tableComedores, setTableComedores] = useState([]);
     const [busqueda, setBusqueda] = useState("")
+    const [crearComedorModalOpen, setCrearComedorModalOpen] = useState(false)
     const { currentUser } = useContext(AuthContext);
+    const { currentDinner} = useContext(ComedorContext);
+    const { dispatch } = useContext(ComedorContext);
 
-    
+
+    const unsetDinner = () => {
+
+        dispatch({ type: "UNSET", payload: null })
+       
+    }
+
 
     const handleChangeBusqueda = (event) => {
         setBusqueda(event.target.value)
         filtrar(event.target.value)
+    }
+
+    const handleModalClose=()=>{
+        setCrearComedorModalOpen(false)
     }
 
     const filtrar = (terminoBusqueda) => {
@@ -83,6 +97,7 @@ export default function Home(props) {
     }
 
     useEffect(() => {
+        unsetDinner()
         getComedores()
     }, [])
 
@@ -105,18 +120,15 @@ export default function Home(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                
+                                <CrearComedorModal open={crearComedorModalOpen} handleCloseModal={handleModalClose} updateComedores={getComedores}/>
                                  <Grid item xs={6} md={6} lg={6}>
                                    
-                                        <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => window.location.href = "/nuevo-comedor"  }  ><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
+                                        <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => {setCrearComedorModalOpen(true)
+                                            }}><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
                                    
                                 </Grid>
-                                <Grid item xs={6} md={6} lg={6}>
-                                   
-                                        <Button sx={{backgroundColor:'#8d75c6'}} variant="contained" style={{ width: '100%', height: '100%' }}  onClick={ () => window.location.href = "/nueva-encuesta"  }    > <PollIcon style={{ fontSize: 60, }}/></Button>
-                                    
-                                </Grid> 
-                                <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                              
+                                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                     <TextField value={busqueda} placeholder="Busqueda por usuario o mail" style={{ marginRight: '8px', width: '100%' }} onChange={handleChangeBusqueda} />
                                     <Button><PersonSearchIcon /></Button>
                                 </Grid>
@@ -132,7 +144,7 @@ export default function Home(props) {
                                                 
                                                 {comedores && comedores.map((comedor) => (
                                                     
-                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name}/>
+                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name} coordinates={comedor.coordinates}/>
 
                                                 ))}
                                                 
@@ -146,7 +158,7 @@ export default function Home(props) {
                                         style={{ display: 'flex', justifyContent: 'right' }}
                                         component="div"
                                         rowsPerPageOptions={[5, 10, 25]}
-                                        count={3}
+                                        count={comedores.length}
                                         page={page}
                                         onPageChange={handleChangePage}
                                         rowsPerPage={rowsPerPage}

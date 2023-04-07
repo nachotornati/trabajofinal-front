@@ -7,10 +7,8 @@ import { Marker } from '@react-google-maps/api'
 
 export default function Mapa(props){
 
-    //const center = {props.location.lat , props.location.lng}
 
-    const center = { lat: -34.593594671986146, lng: -58.39888790931125 }
-
+    const center = {lat:props?.latitud , lng:props?.longitud}
     const [map, setMap] = useState(/** @type google.maps.Map */ (null))
 
     const {isLoaded} = useLoadScript({
@@ -37,7 +35,7 @@ export default function Mapa(props){
             }}
             onLoad={map => setMap(map)}
           >
-            <Marker position={ {lat: -34.593594671986146, lng: -58.39888790931125} } />
+            <Marker position={ center } />
            
           </GoogleMap>
         </Box> 

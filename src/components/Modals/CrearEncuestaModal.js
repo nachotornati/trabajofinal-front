@@ -15,7 +15,7 @@ export default function CrearEncuestaModal(props) {
 
 const [createUserDialogOpen, setCreateUserDialogOpen] = useState(false);
 const [selectedValues, setSelectedValues] = useState([]);
-console.log(props)
+
 const handleChange = (event) => {
     setSelectedValues(event.target.value);
   };

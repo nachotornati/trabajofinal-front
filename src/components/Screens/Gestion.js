@@ -31,10 +31,13 @@ import { FormControl } from '@material-ui/core';
 import { InputLabel } from '@material-ui/core';
 import { Select } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
+import { useContext } from 'react';
+import { AuthContext } from '../Context/AuthContext';
 
 const mdTheme = createTheme();
 
 export default function Gestion(props) {
+    const { currentUser } = useContext(AuthContext);
     const [searchQuery, setSearchQuery] = useState('');
     const [users, setUsers] = useState([]);
     const [tableUsers, setTableUsers] = useState([]);
@@ -53,6 +56,7 @@ export default function Gestion(props) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [selectedValues, setSelectedValues] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
+    
 
     const handleChange = (event) => {
       setSelectedValues(event.target.value);
@@ -244,6 +248,7 @@ export default function Gestion(props) {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': 'Bearer ' + currentUser.accessToken
                 },
                 })
                 .then((response) => {
@@ -286,8 +291,6 @@ export default function Gestion(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                
-                                
                                 <Grid container spacing={0} justifyContent="flex-end">
                                     <Grid item xs={8} md={8} lg={8} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                         <TextField value={busqueda} placeholder="Busqueda por usuario o mail" style={{ marginRight: '8px', width: '100%' }} onChange={handleChangeBusqueda} />

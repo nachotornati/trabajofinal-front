@@ -35,6 +35,12 @@ export const Navigator = () => {
     const { dispatch } = useContext(AuthContext);
     const { currentUser } = useContext(AuthContext);
     
+    const logOut = () => {
+
+            dispatch({ type: "LOGOUT", payload: null })
+            window.location.href = "/"
+    }
+
     /* 
         const { dispatch } = useContext(AuthContext);
         const { currentUser } = useContext(AuthContext);
@@ -103,7 +109,7 @@ export const Navigator = () => {
             </List>
             <Divider sx={{ color: "white" }} />
             <div style={{paddingLeft:"16px"}}>
-            <NavigatorItem name={"Cerrar Sesion"} icon={<LogoutIcon sx={{ color: "#8d75c6" }} />} path={"/"} />
+            <NavigatorItem name={"Cerrar Sesion"} icon={<LogoutIcon sx={{ color: "#8d75c6" }} />} action={() => { logOut() }} path={"/"} />
             </div>
         </Box>
     );

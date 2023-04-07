@@ -8,24 +8,32 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { Stack } from '@mui/material';
 import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import ComedorForm from './Modals/ComedorModal';
-import EncuestaItem from './EncuestaItem';
-import { TableContainer, TablePagination } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
-import { useDispatch } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
+import { useContext } from "react";
+import { ComedorContext } from "../Context/ComedorContext";
 
 const mdTheme = createTheme();
 
 export default function ComedorItem(props) {
+    
+    
+    const { dispatch } = useContext(ComedorContext);
+    const handleComedorDetailed = () => {
+        const dinner = {
+            id: props.id,
+            nombre: props.nombre,
+            direccion: props.direccion,
+            latitud: props.coordinates.lat,
+            longitud: props.coordinates.lng,
+        }
+        
+        if(props.id != null){
+            dispatch({ type: "SET", payload: dinner })
+            window.location.href = "/comedor"
+        }
 
-    console.log("id", props.id)
+    }
+    
 
     return (
 
@@ -71,7 +79,7 @@ export default function ComedorItem(props) {
 
                     <Grid item xs sx={{ textAlign: 'center' }}>
 
-                        <Button component={Link} to={`/comedor/${props.id}`}>Ver mas</Button>
+                        <Button onClick={handleComedorDetailed} >Ver mas</Button>
 
                     </Grid>
 

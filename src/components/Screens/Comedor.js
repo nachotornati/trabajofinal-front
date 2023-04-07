@@ -23,23 +23,26 @@ import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useEffect } from 'react';
 import CrearEncuestaModal from '../Modals/CrearEncuestaModal';
-import ComedorModal from '../Modals/ComedorModal';
+import EditarComedorModal from '../Modals/EditarComedorModal';
+import { useContext } from 'react';
+import { ComedorContext } from '../Context/ComedorContext';
 const mdTheme = createTheme();
 
 
 export default function Comedor(props) {
 
-    const location = {
-        address: 'Azcuenaga 1295, Buenos Aires, Argentina',
-        lat: -34.593594671986146,
-        lng: -58.39888790931125,
-    }
-
+    
     const [comedor, setComedor] = useState([])
     const { id } = useParams()
     const [editComedorModalOpen, setEditComedorModalOpen] = useState(false)
     const [createSurveyModalOpen, setCreateSurveyModalOpen] = useState(false)
     const [tipos, setTipos] = useState([]);
+
+    const { currentDinner } = useContext(ComedorContext);
+
+
+    const dispatch = useContext(ComedorContext);
+
     const handleModalClose=()=>{
         setEditComedorModalOpen(false)
     }
@@ -65,26 +68,7 @@ export default function Comedor(props) {
 
     }
 
-
-    const getComedor = () => {
-        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/comedor', {
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                console.log(res)
-                setComedor(res)
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-
-    }
-
     useEffect(() => {
-
         getTiposEncuesta()
     }, [])
 
@@ -96,8 +80,8 @@ export default function Comedor(props) {
         <ThemeProvider theme={mdTheme}>
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
-                <CrearEncuestaModal tipos={tipos} open={createSurveyModalOpen} handleCloseModal={handleSurveyClose} id={id} />
-                <ComedorModal open={editComedorModalOpen} handleCloseModal={handleModalClose} id={id}/>
+                <CrearEncuestaModal tipos={tipos} open={createSurveyModalOpen} handleCloseModal={handleSurveyClose} id={currentDinner.id} />
+                <EditarComedorModal open={editComedorModalOpen} handleCloseModal={handleModalClose} id={currentDinner.id} />
                 <Box
                     component="main"
                     sx={{
@@ -155,7 +139,7 @@ export default function Comedor(props) {
                                     <Grid container justifyContent="space-between">
                                         <Grid item xs={6} textAlign="left">
                                             <Typography variant="h6" gutterBottom component="div">
-                                                Comedor Tengo Hambre
+                                                {currentDinner.nombre}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6} textAlign='right' >
@@ -179,7 +163,7 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Button component={Link} to={`/comedor/${id}/encuestas`}>
+                                    <Button component={Link} to={`/comedor/encuestas`}>
                                         Ver encuestas
                                     </Button>
                                 </Paper>
@@ -226,7 +210,8 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Mapa location={location} />
+                                    
+                                    <Mapa latitud={currentDinner?.latitud} longitud={currentDinner?.longitud} />
                                 </Paper>
                             </Grid>
                         </Grid>

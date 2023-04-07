@@ -26,6 +26,7 @@ const Survey = ({ survey }) => {
     const saveAnswers = () => {
       
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/answers', {
+           
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -36,7 +37,7 @@ const Survey = ({ survey }) => {
                 {
                     "dinner_id": id,
                     "user_id":"6428b23f7fe9f3ef1f4af416",
-                    "survey_id": survey._id,
+                    "survey_id": survey.id,
                     "answers": answers
                 
                 }

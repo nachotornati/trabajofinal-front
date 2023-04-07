@@ -15,7 +15,7 @@ import TableRow from '@mui/material/TableRow';
 
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
-import ComedorItem from '../ComedorItem';
+import ComedorItem from './ComedorItem';
 import { TableCell, TableContainer, TablePagination, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
@@ -24,7 +24,8 @@ import {Paper} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
+import { useContext } from 'react';
+import { ComedorContext } from '../Context/ComedorContext';
 
 
 
@@ -36,7 +37,7 @@ export default function EncuestasHistoricas(props) {
     const [page, setPage] = React.useState(0);
     const [encuestas, setEncuestas]= React.useState([])
    
-  
+    const { currentDinner } = useContext(ComedorContext);
     
     
    
@@ -49,8 +50,26 @@ export default function EncuestasHistoricas(props) {
         setPage(0);
     };
 
+    const deleteEncuesta = (id) => {
+
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                getEncuestas()
+            })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
+
     const getEncuestas = () => {
-        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/${id}`, {
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/${currentDinner.id}`, {
             headers: {
                 'Content-Type': 'application/json',
             }
@@ -138,18 +157,19 @@ export default function EncuestasHistoricas(props) {
                                                     <TableCell style={{display:'flex',justifyContent:'space-evenly'}} >
                                                         <Button
                                                             
-                                                            onClick={() => window.location.href= `/comedor/${id}/encuesta/${encuesta.id}` }
+                                                            onClick={() => window.location.href= `/comedor/encuesta/${encuesta.id}` }
                                                            
 
                                                         >
                                                             <VisibilityIcon/>
                                                         </Button>
                                                         <Button
-                                                            onClick={() => window.location.href= `/comedor/${id}/editar-encuesta/${encuesta.id}` }
+                                                            onClick={() => window.location.href= `/comedor/editar-encuesta/${encuesta.id}` }
                                                         >
                                                             <EditIcon />
                                                         </Button>
-                                                        <Button>
+                                                        <Button
+                                                            onClick={() => {deleteEncuesta(encuesta.id)}}>
                                                             <DeleteIcon />
                                                         </Button>
 

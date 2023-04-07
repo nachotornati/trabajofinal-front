@@ -11,10 +11,10 @@ import {Link} from '@mui/material';
 const mdTheme = createTheme();
 const EncuestaRealizada = () => {
     const [survey, setSurvey] = useState([]);
-    const { id, idEncuesta } = useParams()
+    const { idEncuesta } = useParams()
     const [answers, setAnswers] = useState([]);
 
-    console.log(id)
+    
 
     const getEncuesta = () => {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/' + idEncuesta, {
@@ -81,7 +81,7 @@ const EncuestaRealizada = () => {
                                 )
                             })}
                             <Grid item xs={12}>
-                                <Button onClick={()=> window.location.href= `/comedor/${id}/encuestas`}>
+                                <Button onClick={()=> window.location.href= `/comedor/encuestas`}>
                                     Volver
                                 </Button>
                             </Grid>
