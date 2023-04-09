@@ -26,24 +26,39 @@ import CrearEncuestaModal from '../Modals/CrearEncuestaModal';
 import EditarComedorModal from '../Modals/EditarComedorModal';
 import { useContext } from 'react';
 import { ComedorContext } from '../Context/ComedorContext';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { AuthContext } from '../Context/AuthContext';
+import CustomAlert from './CustomAlert';
+
 const mdTheme = createTheme();
 
 
 export default function Comedor(props) {
 
-    
+
     const [comedor, setComedor] = useState([])
     const { id } = useParams()
     const [editComedorModalOpen, setEditComedorModalOpen] = useState(false)
     const [createSurveyModalOpen, setCreateSurveyModalOpen] = useState(false)
     const [tipos, setTipos] = useState([]);
-
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
     const { currentDinner } = useContext(ComedorContext);
+    const { currentUser } = useContext(AuthContext);
 
 
     const dispatch = useContext(ComedorContext);
 
-    const handleModalClose=()=>{
+
+    const showSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(true);
+    };
+
+    const closeSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(false);
+    };
+
+    const handleModalClose = () => {
         setEditComedorModalOpen(false)
     }
     const handleSurveyClose = () => {
@@ -54,19 +69,52 @@ export default function Comedor(props) {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey/types', {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
             .then((res) => {
-            
+
                 setTipos(res.types)
-               
+
             })
             .catch((err) => {
                 console.log(err.message);
             });
 
     }
+
+    const handleDeleteComedor = () => {
+        const confirmSubmit = window.confirm('¿Está seguro que desea eliminar el comedor?');
+            if (confirmSubmit) {
+                deleteComedor()
+                
+
+            }
+            else{
+                handleModalClose()
+            }
+
+    }
+    const deleteComedor = () => {
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/dinners/${currentDinner.id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
+            }
+        })
+            .then((response) => response.json())
+            .then((res) => {
+                handleModalClose()
+                //window.location.href = '/home'
+                //showSuccessfulRegister()
+
+
+                //Mandar a pagina home
+            })
+    }
+
 
     useEffect(() => {
         getTiposEncuesta()
@@ -81,7 +129,7 @@ export default function Comedor(props) {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <CrearEncuestaModal tipos={tipos} open={createSurveyModalOpen} handleCloseModal={handleSurveyClose} id={currentDinner.id} />
-                <EditarComedorModal open={editComedorModalOpen} handleCloseModal={handleModalClose} id={currentDinner.id} />
+                <EditarComedorModal open={editComedorModalOpen} handleCloseModal={handleModalClose} id={currentDinner.id} successMessage={showSuccessfulRegister} />
                 <Box
                     component="main"
                     sx={{
@@ -136,18 +184,18 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Grid container justifyContent="space-between">
-                                        <Grid item xs={6} textAlign="left">
+                                    <Grid container>
+                                        <Grid item xs={6}>
                                             <Typography variant="h6" gutterBottom component="div">
                                                 {currentDinner.nombre}
                                             </Typography>
                                         </Grid>
-                                        <Grid item xs={6} textAlign='right' >
-                                            <Button onClick={() => {
-                                            
-                                            setEditComedorModalOpen(true)
-                                            }}>
-                                                Editar
+                                        <Grid item xs={6} textAlign='right' style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                                            <Button onClick={() => setEditComedorModalOpen(true)}>
+                                                <EditIcon />
+                                            </Button>
+                                            <Button onClick={handleDeleteComedor}>
+                                                <DeleteIcon />
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -210,14 +258,16 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    
+
                                     <Mapa latitud={currentDinner?.latitud} longitud={currentDinner?.longitud} />
                                 </Paper>
                             </Grid>
                         </Grid>
 
                     </Container>
-
+                    <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+                    <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+           
                 </Box>
 
             </Box>

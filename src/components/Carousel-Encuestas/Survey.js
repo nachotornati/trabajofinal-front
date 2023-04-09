@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FormControlLabel } from '@mui/material';
 import { Checkbox } from '@material-ui/core';
 import { Grid } from '@material-ui/core';
@@ -10,6 +10,8 @@ import { MenuItem } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import { AuthContext } from "../Context/AuthContext";
+
 
 
 
@@ -22,6 +24,7 @@ const Survey = ({ survey }) => {
     const [isChecked2, setIsChecked2] = useState(false);
     const {id} = useParams()
     const [value, setValue] = React.useState('');
+    const { currentUser } = useContext(AuthContext);
 
     const saveAnswers = () => {
       
@@ -36,7 +39,7 @@ const Survey = ({ survey }) => {
 
                 {
                     "dinner_id": id,
-                    "user_id":"6428b23f7fe9f3ef1f4af416",
+                    "user_id":currentUser.id,
                     "survey_id": survey.id,
                     "answers": answers
                 

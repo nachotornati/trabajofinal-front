@@ -19,13 +19,16 @@ import ComedorItem from './ComedorItem';
 import { TableCell, TableContainer, TablePagination, Typography } from '@mui/material';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import {Link} from '@mui/material';
-import {Paper} from '@mui/material';
+import { Link } from '@mui/material';
+import { Paper } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useContext } from 'react';
 import { ComedorContext } from '../Context/ComedorContext';
+import { AuthContext } from '../Context/AuthContext';
+import CustomAlert from './CustomAlert';
+import { useState } from 'react';
 
 
 
@@ -35,12 +38,11 @@ export default function EncuestasHistoricas(props) {
     const { id } = useParams();// uso el id para buscar las encuestas del comedor
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [page, setPage] = React.useState(0);
-    const [encuestas, setEncuestas]= React.useState([])
-   
+    const [encuestas, setEncuestas] = React.useState([])
+
     const { currentDinner } = useContext(ComedorContext);
+    const { currentUser } = useContext(AuthContext);
     
-    
-   
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -50,17 +52,40 @@ export default function EncuestasHistoricas(props) {
         setPage(0);
     };
 
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
+ 
+    const showSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(true);
+    };
+
+    const closeSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(false);
+    };
+
+    const handleDeleteEncuesta = (id) => {
+        const confirmSubmit = window.confirm('¿Está seguro que desea eliminar la encuesta?');
+            if (confirmSubmit) {
+                deleteEncuesta(id)
+                
+
+            }
+     
+    }
+
     const deleteEncuesta = (id) => {
 
         fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
             .then((res) => {
                 getEncuestas()
+                showSuccessfulRegister()
+
             })
             .catch((err) => {
                 console.log(err.message);
@@ -72,14 +97,15 @@ export default function EncuestasHistoricas(props) {
         fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/${currentDinner.id}`, {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
             .then((res) => {
-                
+
                 setEncuestas(res)
-               
-                
+
+
             })
             .catch((err) => {
                 console.log(err.message);
@@ -96,12 +122,12 @@ export default function EncuestasHistoricas(props) {
         const day = date.getDate().toString().padStart(2, '0');
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear().toString();
-      
+
         return `${day}/${month}/${year}`;
-    
+
     }
 
-    const capitalizeFirstLetter= (str) =>{
+    const capitalizeFirstLetter = (str) => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
@@ -125,79 +151,59 @@ export default function EncuestasHistoricas(props) {
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
                                 <Grid item xs={12}>
-                                    <Typography variant="h4" component="div" gutterBottom>
-                                        Encuestas Históricas del comedor Tengo Hambre
-                                    </Typography>
-                                </Grid>
-
-                                <Grid item xs={12}>
-                                    <Paper>
-                                    <TableContainer>
-                                        <Table >
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Fecha</TableCell>
-                                                    <TableCell>Tipo</TableCell>
-                                                    <TableCell style={{textAlign:'center'}} >Hecha Por</TableCell>
-                                                    <TableCell style={{textAlign:'center'}}>Actions</TableCell>
-                                                    
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {encuestas?.map((encuesta) => (
-                                                    
-                                                  
-                                               
-                                                <TableRow key={encuesta.id} >
-                                                
-                                                    
-                                                    <TableCell>{encuesta.date}</TableCell>
-                                                    <TableCell>{encuesta.survey_type}</TableCell>
-                                                    <TableCell >{encuesta.surver}</TableCell>
-                                                    <TableCell style={{display:'flex',justifyContent:'space-evenly'}} >
-                                                        <Button
-                                                            
-                                                            onClick={() => window.location.href= `/comedor/encuesta/${encuesta.id}` }
-                                                           
-
-                                                        >
-                                                            <VisibilityIcon/>
-                                                        </Button>
-                                                        <Button
-                                                            onClick={() => window.location.href= `/comedor/editar-encuesta/${encuesta.id}` }
-                                                        >
-                                                            <EditIcon />
-                                                        </Button>
-                                                        <Button
-                                                            onClick={() => {deleteEncuesta(encuesta.id)}}>
-                                                            <DeleteIcon />
-                                                        </Button>
-
-                                                    </TableCell>
-                                                    
-                                                
-                                                </TableRow>
-                                                
-                                                ))} 
-                                                
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                    <TablePagination
-                                        style={{ display: 'flex', justifyContent: 'right' }}
-                                        component="div"
-                                        rowsPerPageOptions={[5, 10, 25]}
-                                        count={3}
-                                        page={page}
-                                        onPageChange={handleChangePage}
-                                        rowsPerPage={rowsPerPage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
+                                    <Paper sx={{ p: 2 }}>
+                                        <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center' }}>
+                                            Encuestas Históricas del {currentDinner.nombre}
+                                        </Typography>
+                                        <TableContainer>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Fecha</TableCell>
+                                                        <TableCell>Tipo</TableCell>
+                                                        <TableCell style={{ textAlign: 'center' }}>Hecha Por</TableCell>
+                                                        <TableCell style={{ textAlign: 'center' }}>Actions</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {encuestas?.map(encuesta => (
+                                                        <TableRow key={encuesta.id}>
+                                                            <TableCell>{formatDate(encuesta.date)}</TableCell>
+                                                            <TableCell>{encuesta.survey_type}</TableCell>
+                                                            <TableCell style={{ textAlign: 'center' }}>{encuesta.surver}</TableCell>
+                                                            <TableCell style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                                                                <Button onClick={() => (window.location.href = `/comedor/encuesta/${encuesta.id}`)}>
+                                                                    <VisibilityIcon />
+                                                                </Button>
+                                                                <Button onClick={() => (window.location.href = `/comedor/editar-encuesta/${encuesta.id}`)}>
+                                                                    <EditIcon />
+                                                                </Button>
+                                                                <Button onClick={() => handleDeleteEncuesta(encuesta.id)}>
+                                                                    <DeleteIcon />
+                                                                </Button>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                        <TablePagination
+                                            style={{ display: 'flex', justifyContent: 'right' }}
+                                            component="div"
+                                            rowsPerPageOptions={[5, 10, 25]}
+                                            count={encuestas.length}
+                                            page={page}
+                                            onPageChange={handleChangePage}
+                                            rowsPerPage={rowsPerPage}
+                                            onRowsPerPageChange={handleChangeRowsPerPage}
+                                        />
                                     </Paper>
                                 </Grid>
                             </Grid>
                         </Container>
                     </Box>
+                    <CustomAlert text={"Encuesta eliminada exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+
                 </Box>
             </ThemeProvider>
 

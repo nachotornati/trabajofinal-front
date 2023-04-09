@@ -15,8 +15,8 @@ import { ComedorContext } from "../Context/ComedorContext";
 const mdTheme = createTheme();
 
 export default function ComedorItem(props) {
-    
-    
+
+
     const { dispatch } = useContext(ComedorContext);
     const handleComedorDetailed = () => {
         const dinner = {
@@ -26,18 +26,18 @@ export default function ComedorItem(props) {
             latitud: props.coordinates.lat,
             longitud: props.coordinates.lng,
         }
-        
-        if(props.id != null){
+
+        if (props.id != null) {
             dispatch({ type: "SET", payload: dinner })
             window.location.href = "/comedor"
         }
 
     }
-    
+
 
     return (
 
-        <Grid container spacing={0} sx={{mb: 1}}>
+        <Grid container spacing={0} sx={{ mb: 1 }}>
             <Grid item xs={8} lg={8} md={8}>
 
 
@@ -67,29 +67,37 @@ export default function ComedorItem(props) {
                     }}
                 >
                     <Grid item xs sx={{ textAlign: 'center' }}>
-                        <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
+                        <Typography
+                            component="h1"
+                            variant="h4"
+                            sx={{
+                                color: '#8d75c6',
+                                fontWeight: 'bold',
+                                fontSize: {
+                                    xs: '18px',
+                                    sm: '30px',
+                                    md: '40px',
+                                    lg: '48px',
+                                },
+                            }}
+                            gutterBottom
+                        >
                             {props.nombre}
                         </Typography>
                     </Grid>
-                    <Grid item xs sx={{ textAlign: 'center' }}>
-                        <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
-                            {props.direccion}
-                        </Typography>
-                    </Grid>
 
                     <Grid item xs sx={{ textAlign: 'center' }}>
-
-                        <Button onClick={handleComedorDetailed} >Ver mas</Button>
-
+                        <Button onClick={handleComedorDetailed} sx={{
+                            fontSize: {
+                                xs: '14px',
+                                sm: '20px',
+                                md: '22px',
+                                lg: '22px',
+                            }
+                        }}>Ver más</Button>
                     </Grid>
-
-
-
-
-
                 </Paper>
             </Grid>
-
 
 
 

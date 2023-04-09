@@ -50,7 +50,7 @@ return(
     </div>
     <div className="modal-actions">
         <Button onClick={props.handleCloseModal}>Cancelar</Button>
-        <Button onClick={ () => window.location.href=`/comedor/${props.id}/nueva-encuesta`}>Siguiente</Button>
+        <Button onClick={ () => window.location.href=`/comedor/nueva-encuesta`}>Siguiente</Button>
 
     </div>
 </div>

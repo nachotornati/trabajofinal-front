@@ -15,19 +15,23 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import EncuestaItem from './EncuestaItem';
-import { TableContainer, TablePagination } from '@mui/material'; 
+import { TableContainer, TablePagination } from '@mui/material';
 import { useState } from 'react';
-import {Modal} from '@mui/material';
-import {TextField} from '@mui/material';
-
+import { Modal } from '@mui/material';
+import { TextField } from '@mui/material';
+import CustomAlert from './Screens/CustomAlert';
+import { AuthContext } from './Context/AuthContext';
+import { useContext } from 'react';
 const mdTheme = createTheme();
 
 
 
 export default function CrearComedorModal(props) {
-    
+
     const [nombre, setNombre] = useState('')
     const [direccion, setDireccion] = useState('')
+
+    const {currentUser} = useContext(AuthContext)
 
     const handleComedorName = (value) => {
         setNombre(value)
@@ -40,68 +44,80 @@ export default function CrearComedorModal(props) {
         props.handleCloseModal()
     }
 
+  
+
     const crearComedor = () => {
-        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/dinners`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                name: nombre,
-                address: direccion,
 
+        if (nombre === '' || direccion === '') {
+            props.completeFieldMessage()
+
+        }
+        else {
+            fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/dinners`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-access-token':currentUser.accessToken
+                },
+                body: JSON.stringify({
+                    name: nombre,
+                    address: direccion,
+
+                })
             })
-        })
-            .then((response) => response.json())
-            .then((res) => {
-                
-                props.updateComedores()
-                props.handleCloseModal()
-                //Llamar funcion para recargar comedores
-            })
-            .catch((err) => {
-                console.log(err.message);
-            });
-    }
+                .then((response) => response.json())
+                .then((res) => {
 
-    
+                    props.updateComedores()
+                    props.successMessage()
+                    props.handleCloseModal()
+                    //Llamar funcion para recargar comedores
+                })
+                .catch((err) => {
+                    console.log(err.message);
+                });
+            
+            }   
+        }
 
 
-    return (
-        <Modal open={props.open} onClose={props.handleCloseModal} >
 
-            <div className="modal-container" style={{ width: '70%',height:'60%'}}>
-                <div className="modal-content">
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Typography component="h2" variant="h6" color="primary" gutterBottom>
-                           Nuevo Comedor
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <TextField label="Nombre del comedor" onChange={(e) => handleComedorName(e.target.value)}></TextField>
-                    </Grid>
-                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <TextField label="Direccion" onChange={(e) => handleComedorDireccion(e.target.value)}></TextField>
-                    </Grid>
+
+        return (
+            <Modal open={props.open} onClose={props.handleCloseModal} >
+
+                <div className="modal-container">
+                    <div className="modal-content">
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                Nuevo Comedor
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Nombre del comedor" onChange={(e) => handleComedorName(e.target.value)}></TextField>
+                        </Grid>
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Direccion" onChange={(e) => handleComedorDireccion(e.target.value)}></TextField>
+                        </Grid>
                     </div>
                     <div>
-                    <Grid container spacing={2}>
-                    <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button variant="contained" onClick={props.handleCloseModal}>Cancelar</Button>
-                    </Grid>
-                    <Grid item xs={4} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button variant="contained" onClick={crearComedor} >Guardar</Button>
-                    </Grid>
-                  
-                    </Grid>
-               
+                        <Grid container spacing={2} style={{ marginTop: '20px' }}>
+                            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                <Button variant="contained" onClick={props.handleCloseModal}>Cancelar</Button>
+                            </Grid>
+                            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                <Button variant="contained" onClick={crearComedor} >Guardar</Button>
+                            </Grid>
+
+                        </Grid>
+
+                    </div>
+                
                 </div>
-             
-            </div>
 
 
 
 
-        </Modal>
-    )
-}
+            </Modal>
+        )
+    }

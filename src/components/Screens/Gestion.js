@@ -1,22 +1,11 @@
-import {
-    Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogTitle,
-    Grid,
-    IconButton,
-    Paper,
-    TextField,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TablePagination,
-    TableHead,
-    TableRow,
-    Typography
-} from '@material-ui/core';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import Grid from '@mui/material/Grid';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Button from '@mui/material/Button';
+import { Stack, TextField } from '@mui/material';
+import { Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -33,10 +22,25 @@ import { Select } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
+import { TableCell } from '@mui/material';
+import { TableContainer, TablePagination } from '@mui/material';
+import { Typography } from '@mui/material';
+import { makeStyles } from '@material-ui/core/styles';
+import CustomAlert from './CustomAlert';
+
+
 
 const mdTheme = createTheme();
+const useStyles = makeStyles({
+    root: {
+      '& .MuiInputBase-input': {
+        padding: 0,
+      },
+    },
+  });
 
 export default function Gestion(props) {
+    const classes = useStyles();
     const { currentUser } = useContext(AuthContext);
     const [searchQuery, setSearchQuery] = useState('');
     const [users, setUsers] = useState([]);
@@ -56,10 +60,10 @@ export default function Gestion(props) {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [selectedValues, setSelectedValues] = useState([]);
     const [modalFlag, setModalFlag] = useState(false);
-    
+
 
     const handleChange = (event) => {
-      setSelectedValues(event.target.value);
+        setSelectedValues(event.target.value);
     };
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -95,6 +99,33 @@ export default function Gestion(props) {
         setPage(0);
     };
 
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
+ 
+    const showSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(true);
+    };
+
+    const closeSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(false);
+    };
+
+    const [openSuccessfulEdit, setOpenSuccessfulEdit] =useState(false);
+    const showSuccessfulEditUser = (event, reason) => {
+        setOpenSuccessfulEdit(true);
+    };
+    const closeSuccessfulEditUser = (event, reason) => {
+        setOpenSuccessfulEdit(false);
+    };
+
+    const [openSuccessfulDelete, setOpenSuccessfulDelete] =useState(false);
+    const showSuccessfulDeleteUser = (event, reason) => {
+        setOpenSuccessfulDelete(true);
+    };
+    const closeSuccessfulDeleteUser = (event, reason) => {
+        setOpenSuccessfulDelete(false);
+    };
+
+    //Ver por que no se actualiza al toque
     useEffect(() => {
         getUsuarios();
     }, []);
@@ -104,11 +135,11 @@ export default function Gestion(props) {
         filtrar(event.target.value)
     }
 
-    const filtrar =(terminoBusqueda)=>{
-        var resultadoTablaBusqueda = tableUsers.filter((elemento)=>{
-            
-            if(elemento.username.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
-            ||elemento.email.toString().toLowerCase().includes(terminoBusqueda.toLowerCase()) ){
+    const filtrar = (terminoBusqueda) => {
+        var resultadoTablaBusqueda = tableUsers.filter((elemento) => {
+
+            if (elemento.username.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())
+                || elemento.email.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())) {
                 return elemento
             }
         })
@@ -116,7 +147,7 @@ export default function Gestion(props) {
     }
 
 
-  
+
     // Función para crear un nuevo usuario
     const createUser = (userData) => {
         // Lógica para crear un nuevo usuario en la base de datos o API
@@ -133,20 +164,21 @@ export default function Gestion(props) {
             roles: selectedValues
         }
         console.log(newUser)
-        
+
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             },
             body: JSON.stringify(newUser)
-      
+
 
 
 
         })
-        
-        console.log("Usuario creado correctamente")
+
+        showSuccessfulRegister()
         setUsers([...users, newUser])
         setName("");
         setLastName("");
@@ -156,10 +188,10 @@ export default function Gestion(props) {
         setConfirmPassword("");
         setSelectedValues([]);
         setCreateUserDialogOpen(false);
-        
+
     }
     const handleEditUser = (user) => {
-        console.log("entre")
+        
         setModalFlag(true)
         setSelectedUser(user)
         console.log(selectedUser)
@@ -171,7 +203,7 @@ export default function Gestion(props) {
         setConfirmPassword(user.password);
         setSelectedValues(user.roles);
         setCreateUserDialogOpen(true);
-     
+
     }
     const editUser = () => {
         // Send PUT request to update user info in the backend
@@ -180,49 +212,51 @@ export default function Gestion(props) {
             return;
         }
         const updatedUser = {
-          first_name: name,
-          last_name: lastname,
-          username: userName,
-          email: email,
-          password: password,
-          roles: selectedValues,
+            first_name: name,
+            last_name: lastname,
+            username: userName,
+            email: email,
+            password: password,
+            roles: selectedValues,
         };
 
-        
-        
+
+
         fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/auth/users/${selectedUser.id}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(updatedUser),
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                'x-access-token': currentUser.accessToken
+            },
+            body: JSON.stringify(updatedUser),
         })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error("Network response was not ok");
-            }
-            return response.json();
-          })
-          .then((data) => {
-            // Update the user's information in the state
-            const updatedUsers = users.map(u => u.id === data.id ? data : u);
-            setUsers(updatedUsers);
-            setSelectedUser(null);
-          })
-          .catch((error) => {
-            console.error("There was an error!", error);
-          });
-          //Chequear esto
-          
-          setName("");
-          setLastName("");
-          setUserName("");
-          setEmail("");
-          setPassword("");
-          setConfirmPassword("");
-          setSelectedValues([]);
-          setCreateUserDialogOpen(false);
-      };
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                showSuccessfulEditUser()
+                return response.json();
+            })
+            .then((data) => {
+                // Update the user's information in the state
+                const updatedUsers = users.map(u => u.id === data.id ? data : u);
+                setUsers(updatedUsers);
+                setSelectedUser(null);
+            })
+            .catch((error) => {
+                console.error("There was an error!", error);
+            });
+        //Chequear esto
+
+        setName("");
+        setLastName("");
+        setUserName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setSelectedValues([]);
+        setCreateUserDialogOpen(false);
+    };
 
 
 
@@ -230,6 +264,7 @@ export default function Gestion(props) {
         await fetch('https://trabajo-final-backend-7ezk.onrender.com/api/auth/users', {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
@@ -243,32 +278,44 @@ export default function Gestion(props) {
     }
 
     const handleDeleteUser = (user) => {
+        const confirmSubmit = window.confirm('¿Está seguro que desea eliminar el usuario?');
+            if (confirmSubmit) {
+                deleteUser(user)
+                
+
+            }
+     
+    }
+
+    const deleteUser = (user) => {
         setSelectedUser(user)
         fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/auth/users/${user.id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': 'Bearer ' + currentUser.accessToken
-                },
-                })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
+                'x-access-token': currentUser.accessToken
+            },
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
                 }
-                )
-                .then((data) => {
-                    // Update the user's information in the state
-                    const updatedUsers = users.filter((u) => u.id !== user.id);
-                    setUsers(updatedUsers);
-                    setSelectedUser(null);
-                })
-                .catch((error) => {
-                    console.error("There was an error!", error);
-                }
-                );
-    
+                showSuccessfulDeleteUser()
+                return response.json();
+                
+            }
+            )
+            .then((data) => {
+                // Update the user's information in the state
+                const updatedUsers = users.filter((u) => u.id !== user.id);
+                setUsers(updatedUsers);
+                setSelectedUser(null);
+            })
+            .catch((error) => {
+                console.error("There was an error!", error);
+            }
+            );
+
     }
 
     return (
@@ -291,106 +338,165 @@ export default function Gestion(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                <Grid container spacing={0} justifyContent="flex-end">
-                                    <Grid item xs={8} md={8} lg={8} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                        <TextField value={busqueda} placeholder="Busqueda por usuario o mail" style={{ marginRight: '8px', width: '100%' }} onChange={handleChangeBusqueda} />
-                                        <Button><PersonSearchIcon /></Button>
-                                    </Grid>
-                                    <Grid item xs={4} md={4} lg={4} style={{justifyContent:'right',display:'flex'}}>
-
-                                    <Button sx={{ backgroundColor: '#8d75c6' }} variant="contained" style={{ width: '100%', height: '100%' }} onClick={() => setCreateUserDialogOpen(true)}    > <PersonAddIcon  /></Button>
-
-                                    </Grid>
-                                </Grid>
                                 <Grid item xs={12}>
-                                    <TableContainer>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Nombre</TableCell>
-                                                    <TableCell>Apellido</TableCell>
-                                                    <TableCell>Usuario</TableCell>
-                                                    <TableCell>Dirección de correo electrónico</TableCell>
-                                                    <TableCell >Acciones</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                { users && users.map((user) =>(
-                                                <TableRow key={user.id}>
-                                                    <TableCell>{user.first_name}</TableCell>
-                                                    <TableCell>{user.last_name}</TableCell>
-                                                    <TableCell>{user.username}</TableCell>
-                                                    <TableCell>{user.email}</TableCell>
-                                                    <TableCell>
-                                                        {/* onClick={() => setSelectedUser(user)}*/}
-                                                        <IconButton onClick={()=> handleEditUser(user)}>
-                                                            <EditIcon />
-                                                        </IconButton>
-                                                        <IconButton onClick={()=> handleDeleteUser(user) } >
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </TableCell>
-                                                </TableRow>
-                                                 ))} 
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                    <TablePagination
-                                        style={{ display: 'flex', justifyContent: 'right' }}
-                                        component="div"
-                                        rowsPerPageOptions={[5, 10, 25]}
-                                        count={3}
-                                        page={page}
-                                        onPageChange={handleChangePage}
-                                        rowsPerPage={rowsPerPage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
+                                    <Paper sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        width: '100%'
+                                    }}>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                                <TextField
+                                                    value={busqueda}
+                                                    placeholder="Busqueda por nombre de comedor"
+                                                    style={{ marginRight: '8px', width: '100%' }}
+                                                    onChange={handleChangeBusqueda}
+
+                                                />
+
+                                            </Grid>
+                                            <Grid item xs={6} md={6} lg={6}>
+                                                <Button
+                                                    sx={{ backgroundColor: '#8d75c6' }}
+                                                    variant="contained"
+                                                    style={{ width: '100%', height: '100%' }}
+                                                    onClick={() => setCreateUserDialogOpen(true)}
+                                                >
+                                                    <PersonAddIcon style={{ fontSize: 60 }} />
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TableContainer>
+                                                    <Table>
+                                                        <TableHead>
+                                                            <TableRow>
+                                                                <TableCell>Nombre</TableCell>
+                                                                <TableCell>Apellido</TableCell>
+                                                                <TableCell>Usuario</TableCell>
+                                                                <TableCell>Dirección de correo electrónico</TableCell>
+                                                                <TableCell >Acciones</TableCell>
+                                                            </TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {users && users.map((user) => (
+                                                                <TableRow key={user.id}>
+                                                                    <TableCell>{user.first_name}</TableCell>
+                                                                    <TableCell>{user.last_name}</TableCell>
+                                                                    <TableCell>{user.username}</TableCell>
+                                                                    <TableCell>{user.email}</TableCell>
+                                                                    <TableCell>
+                                                                        {/* onClick={() => setSelectedUser(user)}*/}
+                                                                        <Button onClick={() => handleEditUser(user)}>
+                                                                            <EditIcon />
+                                                                        </Button>
+                                                                        <Button onClick={() => handleDeleteUser(user)} >
+                                                                            <DeleteIcon />
+                                                                        </Button>
+                                                                    </TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                                <TablePagination
+                                                    style={{ display: 'flex', justifyContent: 'right' }}
+                                                    component="div"
+                                                    rowsPerPageOptions={[5, 10, 25]}
+                                                    count={3}
+                                                    page={page}
+                                                    onPageChange={handleChangePage}
+                                                    rowsPerPage={rowsPerPage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Paper>
                                 </Grid>
                             </Grid>
                         </Container>
                     </Box>
+                    <CustomAlert text={"Usuario eliminado exitosamente!"} severity={"success"} open={openSuccessfulDelete} closeAction={closeSuccessfulDeleteUser} />
+                    <CustomAlert text={"Usuario creado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+                    <CustomAlert text={"Datos acutalizados exitosamente!"} severity={"success"} open={openSuccessfulEdit} closeAction={closeSuccessfulEditUser} />
+                        
                 </Box>
             </ThemeProvider>
 
             {/* Diálogo para crear usuario */}
             <Modal open={createUserDialogOpen} onClose={() => setCreateUserDialogOpen(false)}>
-                <div className="modal-container">
-                    <h2>Crear nuevo usuario</h2>
-                    <div className="modal-content">
-                        <TextField label="Nombre" value={name || ""} onChange={handleNameChange} />
-                        <TextField label="Apellido" value={lastname || ""} onChange={handleLastNameChange} />
-                        <TextField label="Nombre de Usuario" value={userName || ""} onChange={handleUserNameChange} />
-                        <TextField label="Dirección de correo electrónico" value={email || ""} onChange={handleEmailChange} />
-                        <TextField label="Contraseña" value={password || ""} type="password" onChange={handlePasswordChange} />
-                        <TextField label="Confirmar contraseña" type="password" value={confirmPassword || ""} onChange={handleConfirmPasswordChange} />
-                        <FormControl style={{ width: '75%' }}>
-                            <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
-                            <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                multiple
-                                value={selectedValues || []}
-                                onChange={handleChange}
-                                label="Option"
-                              
 
-                            >
-                                <MenuItem value={"admin"}>{"Admin"}</MenuItem>
-                                <MenuItem value={"user"}>{"User"}</MenuItem>
-                            </Select>
-                        </FormControl>
+            <div className="modal-container" >
+                <div className="modal-content" >
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                                Crear Usuario
+                            </Typography>
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Nombre" value={name} onChange={handleNameChange}  />
+                       
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Apellido" value={lastname} onChange={handleLastNameChange}  />
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Nombre de Usuario" value={userName} onChange={handleUserNameChange}  />
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Dirección de correo electrónico" value={email} onChange={handleEmailChange}  />
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Contraseña" value={password} type="password" onChange={handlePasswordChange}  />
+                        </Grid>
+
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <TextField label="Confirmar contraseña" type="password" value={confirmPassword} onChange={handleConfirmPasswordChange}  />
+                        </Grid>
+
+                        <Grid item xs={12 } style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                            <FormControl fullWidth>
+                                <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
+                                <Select
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    multiple
+                                    value={selectedValues}
+                                    onChange={handleChange}
+                                    label="Option"
+                                >
+                                    <MenuItem value={"admin"}>{"Admin"}</MenuItem>
+                                    <MenuItem value={"user"}>{"User"}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
                     </div>
-                    <div className="modal-actions">
+
+                    <div style={{marginTop:'20px'}}>
+                    <Grid container spacing={2}>
+                    <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         <Button onClick={() => setCreateUserDialogOpen(false)}>Cancelar</Button>
-                        {modalFlag ? 
-                        (<Button onClick={()=> editUser()}>Editar</Button> ):( 
-                            <Button onClick={() => createUser()}>Guardar</Button>)
-}
+                    </Grid>
+                    <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                        {modalFlag ?
+                            (<Button onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
+                                <Button onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
+                        }
+                        </Grid>
+                    </Grid>
                     </div>
+
                 </div>
+
             </Modal>
         </>
-       
+
     );
 }
 

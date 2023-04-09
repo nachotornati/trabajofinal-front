@@ -12,6 +12,7 @@ import TableBody from '@mui/material/TableBody';
 
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { Paper } from '@mui/material';
 import PollIcon from '@mui/icons-material/Poll';
 import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
 import ComedorItem from './ComedorItem';
@@ -24,6 +25,7 @@ import { ComedorContext } from '../Context/ComedorContext';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import CrearComedorModal from '../CrearComedorModal';
+import CustomAlert from './CustomAlert';
 
 const mdTheme = createTheme();
 export default function Home(props) {
@@ -35,14 +37,34 @@ export default function Home(props) {
     const [busqueda, setBusqueda] = useState("")
     const [crearComedorModalOpen, setCrearComedorModalOpen] = useState(false)
     const { currentUser } = useContext(AuthContext);
-    const { currentDinner} = useContext(ComedorContext);
+    const { currentDinner } = useContext(ComedorContext);
     const { dispatch } = useContext(ComedorContext);
+
+    const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
+    
+    const showCompleteAllFieldError = () => {
+        setopenCompleteAllFieldsError(true);
+    };
+
+    const closeCompleteAllFieldError = (event, reason) => {
+        setopenCompleteAllFieldsError(false);
+    };
+
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
+ 
+    const showSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(true);
+    };
+
+    const closeSuccessfulRegister = (event, reason) => {
+        setOpenSuccessfulRegister(false);
+    };
 
 
     const unsetDinner = () => {
 
         dispatch({ type: "UNSET", payload: null })
-       
+
     }
 
 
@@ -51,7 +73,7 @@ export default function Home(props) {
         filtrar(event.target.value)
     }
 
-    const handleModalClose=()=>{
+    const handleModalClose = () => {
         setCrearComedorModalOpen(false)
     }
 
@@ -80,14 +102,15 @@ export default function Home(props) {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/dinners', {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
             .then((res) => {
-                
+
                 setComedores(res.dinners)
                 setTableComedores(res.dinners)
-                
+
 
             })
             .catch((err) => {
@@ -120,55 +143,69 @@ export default function Home(props) {
                     >
                         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                             <Grid container spacing={1}>
-                                <CrearComedorModal open={crearComedorModalOpen} handleCloseModal={handleModalClose} updateComedores={getComedores}/>
-                                 <Grid item xs={6} md={6} lg={6}>
-                                   
-                                        <Button sx={{backgroundColor:'#8d75c6'}}variant="contained" style={{ width: '100%', height: '100%' }} onClick={ () => {setCrearComedorModalOpen(true)
-                                            }}><SoupKitchenIcon style={{ fontSize: 60 }}/> </Button>
-                                   
-                                </Grid>
-                              
-                                <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
-                                    <TextField value={busqueda} placeholder="Busqueda por usuario o mail" style={{ marginRight: '8px', width: '100%' }} onChange={handleChangeBusqueda} />
-                                    <Button><PersonSearchIcon /></Button>
-                                </Grid>
-
+                                <CrearComedorModal open={crearComedorModalOpen} handleCloseModal={handleModalClose} updateComedores={getComedores} successMessage={showSuccessfulRegister} completeFieldMessage={showCompleteAllFieldError} />
                                 <Grid item xs={12}>
-                                    <TableContainer>
-                                        <Table >
-                                            <TableHead>
-                                                <TableRow>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                
-                                                {comedores && comedores.map((comedor) => (
-                                                    
-                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name} coordinates={comedor.coordinates}/>
-
-                                                ))}
-                                                
-
-
-
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                    <TablePagination
-                                        style={{ display: 'flex', justifyContent: 'right' }}
-                                        component="div"
-                                        rowsPerPageOptions={[5, 10, 25]}
-                                        count={comedores.length}
-                                        page={page}
-                                        onPageChange={handleChangePage}
-                                        rowsPerPage={rowsPerPage}
-                                        onRowsPerPageChange={handleChangeRowsPerPage}
-                                    />
+                                    <Paper sx={{
+                                        p: 2,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        width: '100%'
+                                    }}>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
+                                                <TextField
+                                                    value={busqueda}
+                                                    placeholder="Busqueda por nombre de comedor"
+                                                    style={{ marginRight: '8px', width: '100%' }}
+                                                    onChange={handleChangeBusqueda}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6} md={6} lg={6}>
+                                                <Button
+                                                    sx={{ backgroundColor: '#8d75c6' }}
+                                                    variant="contained"
+                                                    style={{ width: '100%', height: '100%' }}
+                                                    onClick={() => {
+                                                        setCrearComedorModalOpen(true);
+                                                    }}
+                                                >
+                                                    <SoupKitchenIcon style={{ fontSize: 60 }} />
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <TableContainer>
+                                                    <Table>
+                                                        <TableHead>
+                                                            <TableRow>{/* Add table header cells here */}</TableRow>
+                                                        </TableHead>
+                                                        <TableBody>
+                                                            {comedores &&
+                                                                comedores.map((comedor) => (
+                                                                    <ComedorItem key={comedor.id} id={comedor._id} direccion={comedor.address} nombre={comedor.name} coordinates={comedor.coordinates} />
+                                                                ))}
+                                                        </TableBody>
+                                                    </Table>
+                                                </TableContainer>
+                                                <TablePagination
+                                                    style={{ display: 'flex', justifyContent: 'right' }}
+                                                    component="div"
+                                                    rowsPerPageOptions={[5, 10, 25]}
+                                                    count={comedores.length}
+                                                    page={page}
+                                                    onPageChange={handleChangePage}
+                                                    rowsPerPage={rowsPerPage}
+                                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                                />
+                                            </Grid>
+                                        </Grid>
+                                    </Paper>
                                 </Grid>
-                                
                             </Grid>
                         </Container>
                     </Box>
+                    <CustomAlert text={"Completa todos los campos!"} severity={"error"} open={openCompleteAllFieldMessage} closeAction={closeCompleteAllFieldError} />
+                    <CustomAlert text={"Comedor creado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+                                              
                 </Box>
             </ThemeProvider>
 

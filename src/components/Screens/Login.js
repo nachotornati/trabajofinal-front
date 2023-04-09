@@ -12,10 +12,11 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import { useState } from "react";
-import { ThemeProvider } from '@mui/material/styles';
 import NavigatorWithButton from "../NavigatorWithButton";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
+import CustomAlert from './CustomAlert'
+
 
 
 export default function Login(props) {
@@ -38,14 +39,43 @@ export default function Login(props) {
         event.preventDefault();
     };
 
+    
+    const [openInvalidEmailError, setopenInvalidEmailError] = React.useState(false);
+    const [openInvalidUserError, setopenInvalidUserError] = React.useState(false);
+
+    const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
+    const showCompleteAllFieldError = () => {
+        setopenCompleteAllFieldsError(true);
+    };
+
+    const closeCompleteAllFieldError = (event, reason) => {
+        setopenCompleteAllFieldsError(false);
+    };
+
+    const showInvalidEmailError = () => {
+        setopenInvalidEmailError(true);
+    };
+
+    const closeInvalidEmailError = (event, reason) => {
+        setopenInvalidEmailError(false);
+    };
+
+    const showInvalidUserError = () => {
+        setopenInvalidUserError(true);
+    };
+
+    const closeInvalidUserError = (event, reason) => {
+        setopenInvalidUserError(false);
+    };
+
     const { dispatch } = useContext(AuthContext);
 
     const handleLogin = (e) => {
         e.preventDefault()
         setLoading(true);
         if (username === '' || password === '') {
-            //showCompleteAllFieldError()
-            setLoading(false);
+            showCompleteAllFieldError()
+            
         }
         else {
 
@@ -59,7 +89,7 @@ export default function Login(props) {
                     password: password
 
 
-             })
+                })
             })
                 .then((response) => response.json())
                 .then((res) => {
@@ -70,17 +100,17 @@ export default function Login(props) {
                         roles: res.roles,
                         accessToken: res.accessToken,
                     }
-                    if(res.accessToken != null){
+                    if (res.accessToken != null) {
                         dispatch({ type: "LOGIN", payload: user })
                         window.location.href = "/home"
                     }
-                    else{
+                    else {
                         alert("Usuario o contraseña incorrectos")
                     }
 
                 })
                 // .then((response) => {
-                    
+
                 //     //console.log(response.json())
                 //     let res = response.json()
                 //     console.log(res)
@@ -94,7 +124,7 @@ export default function Login(props) {
                 //     if (response.status === 200) {
                 //         dispatch({ type: "LOGIN", payload: user })
                 //         //window.location.href = "/home"
-                        
+
                 //     }   
                 //     else {
                 //         //showVerifyEmailMessage()
@@ -133,17 +163,17 @@ export default function Login(props) {
     return (
         <div className="row g-0 auth-wrapper landing-page">
 
-            <NavigatorWithButton/>
+            <NavigatorWithButton />
             <div className="col-12 col-md-7 col-lg-6 auth-main-col text-center">
                 <div className="d-flex flex-column align-content-end">
                     <div className="auth-body mx-auto">
                         <img
                             src="/fundacion-si-manuel-lozano (1).png"
                             //className="d-inline-block align-top logo"
-                            style={{display:'flex',justifyContent:'center',alignItems:'center', margin:'auto',width:70,height:70}}
+                            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto', width: 70, height: 70 }}
                         />
-                        
-                        <p style={{display:'flex',justifyContent:'center',alignItems:'center', margin:'auto'}}>Ingresa a tu cuenta</p>
+
+                        <p style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: 'auto' }}>Ingresa a tu cuenta</p>
                         <div className="auth-form-container text-start">
                             <Box
                                 component="form"
@@ -162,7 +192,7 @@ export default function Login(props) {
 
                                 <div>
                                     <TextField
-                                        label="Correo Electrónico"
+                                        label="Usuario"
                                         id="outlined-start-adornment"
                                         sx={{ m: 1, width: '25ch' }}
                                         onChange={(e) => { setUsername(e.target.value) }}
@@ -181,7 +211,7 @@ export default function Login(props) {
                                                         onClick={handleClickShowPassword}
                                                         onMouseDown={handleMouseDownPassword}
                                                         edge="end"
-                                                        sx={{ color: 'white' }}
+                                                        sx={{ color: 'black' }}
                                                     >
                                                         {showPassword ? <VisibilityOff /> : <Visibility />}
                                                     </IconButton>
@@ -224,26 +254,27 @@ export default function Login(props) {
                                 </div> */}
 
                                 <div className="text-center">
-                                   
+                                    
 
                                         <Button
-                                            size="medium"
+                                            
                                             onClick={handleLogin}
-                                            loading={loading}
+                                           
                                             variant="contained"
                                         >
                                             Iniciar Sesión
-                                        </Button> 
-                                    
+                                        </Button>
+                                   
                                 </div>
 
                             </Box>
-                            
+
                         </div>
                     </div>
                 </div>
             </div>
- 
+            <CustomAlert text={"Completa todos los campos!"} severity={"error"} open={openCompleteAllFieldMessage} closeAction={closeCompleteAllFieldError} />
+            <CustomAlert text={"Usuario o contraseña incorrectos!"} severity={"error"} open={openInvalidUserError} closeAction={closeInvalidUserError} />
         </div>
     )
 
