@@ -40,6 +40,8 @@ export default function Home(props) {
     const { currentDinner } = useContext(ComedorContext);
     const { dispatch } = useContext(ComedorContext);
 
+    console.log("currentDinner", currentUser)
+
     const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
     
     const showCompleteAllFieldError = () => {

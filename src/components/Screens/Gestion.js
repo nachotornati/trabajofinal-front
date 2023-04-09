@@ -194,7 +194,6 @@ export default function Gestion(props) {
         
         setModalFlag(true)
         setSelectedUser(user)
-        console.log(selectedUser)
         setName(user.first_name);
         setLastName(user.last_name);
         setUserName(user.username);
@@ -241,21 +240,23 @@ export default function Gestion(props) {
                 // Update the user's information in the state
                 const updatedUsers = users.map(u => u.id === data.id ? data : u);
                 setUsers(updatedUsers);
+                console.log("Actualice los estados")
                 setSelectedUser(null);
+                setName("");
+                setLastName("");
+                setUserName("");
+                setEmail("");
+                setPassword("");
+                setConfirmPassword("");
+                setSelectedValues([]);
+                setCreateUserDialogOpen(false);
             })
             .catch((error) => {
                 console.error("There was an error!", error);
             });
         //Chequear esto
 
-        setName("");
-        setLastName("");
-        setUserName("");
-        setEmail("");
-        setPassword("");
-        setConfirmPassword("");
-        setSelectedValues([]);
-        setCreateUserDialogOpen(false);
+       
     };
 
 
@@ -275,6 +276,19 @@ export default function Gestion(props) {
             .catch((error) => {
                 console.error(error);
             });
+    }
+
+    const handleCloseModal = () => {
+        setSelectedUser(null);
+        setName("");
+        setLastName("");
+        setUserName("");
+        setEmail("");
+        setPassword("");
+        setConfirmPassword("");
+        setSelectedValues([]);
+        setCreateUserDialogOpen(false)
+    
     }
 
     const handleDeleteUser = (user) => {
@@ -371,21 +385,21 @@ export default function Gestion(props) {
                                                     <Table>
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell>Nombre</TableCell>
-                                                                <TableCell>Apellido</TableCell>
-                                                                <TableCell>Usuario</TableCell>
-                                                                <TableCell>Dirección de correo electrónico</TableCell>
-                                                                <TableCell >Acciones</TableCell>
+                                                                <TableCell style={{textAlign:'center'}}>Nombre</TableCell>
+                                                                <TableCell style={{textAlign:'center'}} >Apellido</TableCell>
+                                                                <TableCell style={{textAlign:'center'}} >Usuario</TableCell>
+                                                                <TableCell style={{textAlign:'center'}}>Dirección de correo electrónico</TableCell>
+                                                                <TableCell style={{textAlign:'center'}}>Acciones</TableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {users && users.map((user) => (
                                                                 <TableRow key={user.id}>
-                                                                    <TableCell>{user.first_name}</TableCell>
-                                                                    <TableCell>{user.last_name}</TableCell>
-                                                                    <TableCell>{user.username}</TableCell>
-                                                                    <TableCell>{user.email}</TableCell>
-                                                                    <TableCell>
+                                                                    <TableCell style={{textAlign:'center'}} >{user.first_name}</TableCell>
+                                                                    <TableCell style={{textAlign:'center'}}>{user.last_name}</TableCell>
+                                                                    <TableCell style={{textAlign:'center'}}>{user.username}</TableCell>
+                                                                    <TableCell style={{textAlign:'center'}}>{user.email}</TableCell>
+                                                                    <TableCell style={{textAlign:'center'}}>
                                                                         {/* onClick={() => setSelectedUser(user)}*/}
                                                                         <Button onClick={() => handleEditUser(user)}>
                                                                             <EditIcon />
@@ -424,10 +438,10 @@ export default function Gestion(props) {
             </ThemeProvider>
 
             {/* Diálogo para crear usuario */}
-            <Modal open={createUserDialogOpen} onClose={() => setCreateUserDialogOpen(false)}>
+            <Modal open={createUserDialogOpen} onClose={handleCloseModal}>
 
-            <div className="modal-container" >
-                <div className="modal-content" >
+            <div className="modal-container">
+                <div className="modal-content"  >
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
                             <Typography component="h2" variant="h6" color="primary" gutterBottom>
                                 Crear Usuario
@@ -481,12 +495,12 @@ export default function Gestion(props) {
                     <div style={{marginTop:'20px'}}>
                     <Grid container spacing={2}>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button onClick={() => setCreateUserDialogOpen(false)}>Cancelar</Button>
+                        <Button variant="contained"onClick={() => setCreateUserDialogOpen(false)}>Cancelar</Button>
                     </Grid>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         {modalFlag ?
-                            (<Button onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
-                                <Button onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
+                            (<Button variant='contained' onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
+                                <Button variant="contained" onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
                         }
                         </Grid>
                     </Grid>

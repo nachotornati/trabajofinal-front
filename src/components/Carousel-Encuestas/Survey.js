@@ -33,6 +33,7 @@ const Survey = ({ survey }) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             },
             body: JSON.stringify(
 

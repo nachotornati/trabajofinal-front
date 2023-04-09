@@ -20,18 +20,22 @@ import Carousel, { Carouselitem } from "../Carousel-Encuestas/Survey"
 import { useState } from 'react';
 import { useEffect } from 'react';
 import Survey from '../Carousel-Encuestas/Survey';
+import { AuthContext } from '../Context/AuthContext';
+import { useContext } from 'react';
 
 const mdTheme = createTheme();
 
 export default function PantallaEncuestas(props) {
 
     const [encuesta, setEncuesta] = useState([])
+    const { currentUser } = useContext(AuthContext)
     
 
     const getEncuestas = () => {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey', {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
