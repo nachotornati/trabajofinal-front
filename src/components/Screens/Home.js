@@ -171,7 +171,7 @@ export default function Home(props) {
                                                         setCrearComedorModalOpen(true);
                                                     }}
                                                 >
-                                                    <SoupKitchenIcon style={{ fontSize: 60 }} />
+                                                    Nuevo Comedor
                                                 </Button>
                                             </Grid>
                                             <Grid item xs={12}>

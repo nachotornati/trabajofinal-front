@@ -11,6 +11,7 @@ import { Button } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { AuthContext } from "../Context/AuthContext";
+import { ComedorContext } from "../Context/ComedorContext";
 
 
 
@@ -25,6 +26,7 @@ const Survey = ({ survey }) => {
     const {id} = useParams()
     const [value, setValue] = React.useState('');
     const { currentUser } = useContext(AuthContext);
+    const {currentDinner} = useContext(ComedorContext);
 
     const saveAnswers = () => {
       
@@ -39,7 +41,7 @@ const Survey = ({ survey }) => {
 
 
                 {
-                    "dinner_id": id,
+                    "dinner_id": currentDinner.id,
                     "user_id":currentUser.id,
                     "survey_id": survey.id,
                     "answers": answers
