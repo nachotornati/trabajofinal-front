@@ -417,7 +417,7 @@ export default function Gestion(props) {
                                                     style={{ display: 'flex', justifyContent: 'right' }}
                                                     component="div"
                                                     rowsPerPageOptions={[5, 10, 25]}
-                                                    count={3}
+                                                    count={users.length}
                                                     page={page}
                                                     onPageChange={handleChangePage}
                                                     rowsPerPage={rowsPerPage}

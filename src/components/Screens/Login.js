@@ -17,16 +17,17 @@ import { AuthContext } from "../Context/AuthContext";
 import CustomAlert from './CustomAlert'
 import { Grid } from "@material-ui/core";
 import { FormLabel } from '@mui/material';
+import "../../assets/scss/spinner.scss";
 
 
 
 export default function Login(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [status, setStatus] = useState(0);
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-    const [loading, setLoading] = React.useState(false);
+    
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -69,9 +70,16 @@ export default function Login(props) {
 
     const handleLogin = (e) => {
         e.preventDefault()
-        setLoading(true);
+        
+        if (isLoggingIn) {
+            return <div class="spinner"></div>;
+        }
+
+        setIsLoggingIn(true);
+
         if (username === '' || password === '') {
             showCompleteAllFieldError()
+            setIsLoggingIn(false);
 
         }
         else {
@@ -94,6 +102,7 @@ export default function Login(props) {
                     }
                     if (response.status === 404 || response.status === 401) {
                         showInvalidUserError()
+                        setIsLoggingIn(false);
                     }
                 })
                 .then((res) => {
@@ -106,6 +115,7 @@ export default function Login(props) {
                             accessToken: res.accessToken,
                         }
 
+                        setIsLoggingIn(false);
                         dispatch({ type: "LOGIN", payload: user })
                         window.location.href = "/home"
 
@@ -176,7 +186,7 @@ export default function Login(props) {
                                 label="Password"
                             />
                         </FormControl>
-                        <Button style={{ marginTop: '20px', backgroundColor: '#8d75c6' }} onClick={handleLogin} variant="contained">Iniciar Sesión</Button>
+                        <Button style={{ marginTop: '20px', backgroundColor: '#8d75c6' }} onClick={handleLogin} disabled={isLoggingIn} variant="contained">Iniciar Sesión</Button>
                     </Box>
                 </Grid>
             </Grid>

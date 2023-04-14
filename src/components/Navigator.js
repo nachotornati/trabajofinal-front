@@ -15,7 +15,7 @@ import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-
+import { useHistory } from "react-router-dom";
 
 //import SavingsIcon from '@mui/icons-material/Savings'
 
@@ -87,14 +87,20 @@ export const Navigator = () => {
         setState({ ...state, [anchor]: open });
     };
 
-    const list = (anchor) => (
+    const list = (anchor) => {
+        
+
+        const handleLogoClick = () => {
+            window.location.href = "/home"
+        };
+        return(
         <Box
             sx={{ width: anchor === 'top' || anchor === 'bottom' ? 'auto' : 250, backgroundColor: 'white', height: "100%" }}
             role="presentation"
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
-            <div style={{ "width": "100%", "marginTop": "25px", "textAlign": "center", "marginLeft": "-10px" }}>
+            <div style={{ "width": "100%", "marginTop": "25px", "textAlign": "center", "marginLeft": "-10px" }} onClick={handleLogoClick} >
                 <img
                     src="/fundacion-si-manuel-lozano.png"
                     width="200 !important"
@@ -111,8 +117,8 @@ export const Navigator = () => {
             <div style={{paddingLeft:"16px"}}>
             <NavigatorItem name={"Cerrar Sesion"} icon={<LogoutIcon sx={{ color: "#8d75c6" }} />} action={() => { logOut() }} path={"/"} />
             </div>
-        </Box>
-    );
+        </Box>)
+    };
 
 
     return (
