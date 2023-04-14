@@ -495,7 +495,7 @@ export default function Gestion(props) {
                     <div style={{marginTop:'20px'}}>
                     <Grid container spacing={2}>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button variant="contained"onClick={() => setCreateUserDialogOpen(false)}>Cancelar</Button>
+                        <Button variant="contained"onClick={() => handleCloseModal()}>Cancelar</Button>
                     </Grid>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         {modalFlag ?
