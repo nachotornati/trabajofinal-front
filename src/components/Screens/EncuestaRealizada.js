@@ -81,7 +81,7 @@ const EncuestaRealizada = () => {
                                         return (
                                             <>
 
-                                                <FormLabel style={{marginTop:'30px'}}>{pregunta.question.legend}</FormLabel>
+                                                <FormLabel style={{marginTop:'30px',color:'#8d75c6'}}>{pregunta.question.legend}</FormLabel>
                                                 <TextField style={{marginTop:'10px'}} value={pregunta.answer.value} />
                                             </>
 
@@ -89,7 +89,7 @@ const EncuestaRealizada = () => {
                                         )
                                     })}
                                     <Grid item xs={12} style={{marginTop:'20px'}}>
-                                        <Button onClick={() => window.location.href = `/comedor/encuestas`}>
+                                        <Button style={{color:'#8d75c6'}} onClick={() => window.location.href = `/comedor/encuestas`}>
                                             Volver
                                         </Button>
                                     </Grid>

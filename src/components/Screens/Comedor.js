@@ -178,19 +178,29 @@ export default function Comedor(props) {
                                 >
                                     <Grid container>
                                         <Grid item xs={6}>
-                                            <Typography variant="h6" gutterBottom component="div">
+                                            <Typography variant="h6" style={{color: "#8d75c6"}} gutterBottom component="div">
                                                 {currentDinner.nombre}
                                             </Typography>
                                         </Grid>
                                         <Grid item xs={6} textAlign='right' style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                             <Button onClick={() => setEditComedorModalOpen(true)}>
-                                                <EditIcon />
+                                                <EditIcon sx={{color: "#8d75c6"}}/>
                                             </Button>
                                             <Button onClick={handleDeleteComedor}>
-                                                <DeleteIcon />
+                                                <DeleteIcon sx={{color: "#8d75c6"}} />
                                             </Button>
                                         </Grid>
                                     </Grid>
+                                    <Grid>
+                                        <Typography variant="body2" gutterBottom component="div">
+                                            {currentDinner.direccion}
+                                        </Typography>
+                                    </Grid>
+                                    {/* <Grid>
+                                        <Typography variant="body2" gutterBottom component="div">
+                                            {currentDinner.telefono}
+                                        </Typography>
+                                    </Grid> */}
                                 </Paper>
                             </Grid>
 
@@ -203,7 +213,7 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Button component={Link} to={`/comedor/encuestas`}>
+                                    <Button style={{color: "#8d75c6"}} component={Link} to={`/comedor/encuestas`}>
                                         Ver encuestas
                                     </Button>
                                 </Paper>
@@ -216,7 +226,7 @@ export default function Comedor(props) {
                                         flexDirection: 'column',
                                     }}
                                 >
-                                    <Button
+                                    <Button style={{color: "#8d75c6"}}
                                         onClick={() => {
                                             setCreateSurveyModalOpen(true)
                                         }}>

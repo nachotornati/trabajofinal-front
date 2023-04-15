@@ -9,15 +9,19 @@ import { Select } from '@material-ui/core';
 import { MenuItem } from '@material-ui/core';
 import { Button } from '@material-ui/core';
 import { Typography } from '@mui/material';
+import { AuthContext } from '../Context/AuthContext';
+import { useContext } from 'react';
 
 
 
 const EditarSurveyCarousel = ({ comedor, id, answers }) => {
 
     const [newAnswers, setNewAnswers] = useState(answers);
+
     const [currentQuestion, setCurrentQuestion] = useState(0);
+    const { currentUser } = useContext(AuthContext);
     const currentQuestionData = newAnswers[currentQuestion];
-    
+    console.log("Answers", answers)
 
     const isLastQuestion = currentQuestion === answers.length - 1;
 
@@ -32,6 +36,7 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             },
             body: JSON.stringify(newAnswers)
 
@@ -108,10 +113,21 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
     }
 
 
-    const handleAnswerNumerical = (questionId, answer) => {
-        let respuesta = { value: answer }
-
-        handleAnswer(questionId, respuesta)
+    const handleAnswerNumerical = (questionId, newAnswerValue) => {
+        setNewAnswers(prevAnswers =>
+            prevAnswers.map(answer => {
+                if (answer._id === questionId) {
+                    return {
+                        ...answer,
+                        answer: {
+                            ...answer.answer,
+                            value: newAnswerValue
+                        }
+                    }
+                }
+                return answer
+            })
+        )
     };
 
 
@@ -236,8 +252,8 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
                             </Typography>
                         </Grid>
                         <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField variant="outlined" type="number" style={{ width: '50%' }} onChange={(e) => handleAnswerComment(currentQuestionData._id, e.target.value)}
-                                value={answers[currentQuestionData._id.value]}> </TextField>
+                            <TextField variant="outlined" style={{ width: '50%' }} onChange={(e) => handleAnswerNumerical(currentQuestionData._id, e.target.value)}
+                               value={currentQuestionData.answer.value}> </TextField>
                         </Grid>
                         <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                             {currentQuestion > 0 && <Button onClick={handlePrevious}>Anterior</Button>}

@@ -43,14 +43,15 @@ export default function EncuestasHistoricas(props) {
     const { currentDinner } = useContext(ComedorContext);
     const { currentUser } = useContext(AuthContext);
     
+    
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
+      };
+    
+      const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-    };
+      };
 
     const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
  
@@ -152,7 +153,7 @@ export default function EncuestasHistoricas(props) {
                             <Grid container spacing={1}>
                                 <Grid item xs={12}>
                                     <Paper sx={{ p: 2 }}>
-                                        <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center' }}>
+                                        <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center' ,color: "#8d75c6"}}>
                                             Encuestas Históricas del {currentDinner.nombre}
                                         </Typography>
                                         <TableContainer>
@@ -166,20 +167,23 @@ export default function EncuestasHistoricas(props) {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                    {encuestas?.map(encuesta => (
+                                                
+                                                    { encuestas
+                                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                    .map(encuesta => (
                                                         <TableRow key={encuesta.id}>
                                                             <TableCell>{formatDate(encuesta.date)}</TableCell>
                                                             <TableCell>{encuesta.survey_type}</TableCell>
                                                             <TableCell style={{ textAlign: 'center' }}>{encuesta.surver}</TableCell>
                                                             <TableCell style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                                                                 <Button onClick={() => (window.location.href = `/comedor/encuesta/${encuesta.id}`)}>
-                                                                    <VisibilityIcon />
+                                                                    <VisibilityIcon sx={{color: "#8d75c6"}} />
                                                                 </Button>
                                                                 <Button onClick={() => (window.location.href = `/comedor/editar-encuesta/${encuesta.id}`)}>
-                                                                    <EditIcon />
+                                                                    <EditIcon sx={{color: "#8d75c6"}}/>
                                                                 </Button>
                                                                 <Button onClick={() => handleDeleteEncuesta(encuesta.id)}>
-                                                                    <DeleteIcon />
+                                                                    <DeleteIcon sx={{color: "#8d75c6"}} />
                                                                 </Button>
                                                             </TableCell>
                                                         </TableRow>

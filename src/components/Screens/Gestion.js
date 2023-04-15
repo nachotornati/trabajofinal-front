@@ -370,14 +370,14 @@ export default function Gestion(props) {
                                                 />
 
                                             </Grid>
-                                            <Grid item xs={6} md={6} lg={6}>
+                                            <Grid item xs={6} md={6} lg={6} >
                                                 <Button
-                                                    sx={{ backgroundColor: '#8d75c6' }}
+                                                    sx={{ backgroundColor: '#8d75c6', padding:0 }}
                                                     variant="contained"
                                                     style={{ width: '100%', height: '100%' }}
                                                     onClick={() => setCreateUserDialogOpen(true)}
                                                 >
-                                                    <PersonAddIcon style={{ fontSize: 60 }} />
+                                                    <PersonAddIcon style={{ fontSize: 40 }} />
                                                 </Button>
                                             </Grid>
                                             <Grid item xs={12}>
@@ -385,15 +385,17 @@ export default function Gestion(props) {
                                                     <Table>
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell style={{textAlign:'center'}}>Nombre</TableCell>
-                                                                <TableCell style={{textAlign:'center'}} >Apellido</TableCell>
-                                                                <TableCell style={{textAlign:'center'}} >Usuario</TableCell>
-                                                                <TableCell style={{textAlign:'center'}}>Dirección de correo electrónico</TableCell>
-                                                                <TableCell style={{textAlign:'center'}}>Acciones</TableCell>
+                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Nombre</TableCell>
+                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}} >Apellido</TableCell>
+                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}} >Usuario</TableCell>
+                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Dirección de correo electrónico</TableCell>
+                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Acciones</TableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
-                                                            {users && users.map((user) => (
+                                                            {users && users
+                                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                            .map((user) => (
                                                                 <TableRow key={user.id}>
                                                                     <TableCell style={{textAlign:'center'}} >{user.first_name}</TableCell>
                                                                     <TableCell style={{textAlign:'center'}}>{user.last_name}</TableCell>
@@ -402,10 +404,10 @@ export default function Gestion(props) {
                                                                     <TableCell style={{textAlign:'center'}}>
                                                                         {/* onClick={() => setSelectedUser(user)}*/}
                                                                         <Button onClick={() => handleEditUser(user)}>
-                                                                            <EditIcon />
+                                                                            <EditIcon sx={{color:'#8d75c6'}} />
                                                                         </Button>
                                                                         <Button onClick={() => handleDeleteUser(user)} >
-                                                                            <DeleteIcon />
+                                                                            <DeleteIcon sx={{color:'#8d75c6'}}  />
                                                                         </Button>
                                                                     </TableCell>
                                                                 </TableRow>
@@ -443,7 +445,7 @@ export default function Gestion(props) {
             <div className="modal-container">
                 <div className="modal-content"  >
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <Typography component="h2" variant="h6" color="primary" gutterBottom>
+                            <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
                                 Crear Usuario
                             </Typography>
                         </Grid>
@@ -495,12 +497,12 @@ export default function Gestion(props) {
                     <div style={{marginTop:'20px'}}>
                     <Grid container spacing={2}>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button variant="contained"onClick={() => handleCloseModal()}>Cancelar</Button>
+                        <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={() => handleCloseModal()}>Cancelar</Button>
                     </Grid>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         {modalFlag ?
-                            (<Button variant='contained' onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
-                                <Button variant="contained" onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
+                            (<Button variant='contained' style={{backgroundColor:'#8d75c6'}}onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
+                                <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
                         }
                         </Grid>
                     </Grid>

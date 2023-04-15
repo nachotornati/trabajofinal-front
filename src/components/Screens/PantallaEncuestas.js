@@ -28,6 +28,7 @@ const mdTheme = createTheme();
 export default function PantallaEncuestas(props) {
 
     const [encuesta, setEncuesta] = useState([])
+    const [preguntas, setPreguntas] = useState([])
     const { currentUser } = useContext(AuthContext)
     
 
@@ -41,7 +42,18 @@ export default function PantallaEncuestas(props) {
             .then((response) => response.json())
             .then((res) => {
                 console.log(res)
-                setEncuesta(res) 
+                const tranformedQuestions = res.questions.map(question => {
+                    let answer = {};
+                    return{
+                        question,
+                        answer
+                    }
+
+
+                })
+                setPreguntas(tranformedQuestions)
+                setEncuesta(res)
+                
                     
 
             })
@@ -84,7 +96,7 @@ export default function PantallaEncuestas(props) {
                                             
                                            
 
-                                           {encuesta.length != 0 ? < Survey survey={encuesta}/> :'cargando encuesta...'}
+                                           {encuesta.length != 0 ? < Survey survey={encuesta} preguntas={preguntas}/> :'cargando encuesta...'}
 
                                         
 

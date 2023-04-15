@@ -87,7 +87,8 @@ export default function ComedorItem(props) {
                     </Grid>
 
                     <Grid item xs sx={{ textAlign: 'center' }}>
-                        <Button onClick={handleComedorDetailed} sx={{
+                    <Button onClick={handleComedorDetailed} style={{color:'#8d75c6'}}  sx={{
+                        // <Button onClick={handleComedorDetailed} style={{backgroundColor:'#8d75c6',color:"white"}} sx={{
                             fontSize: {
                                 xs: '14px',
                                 sm: '20px',

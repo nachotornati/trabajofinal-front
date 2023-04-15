@@ -27,7 +27,7 @@ export default function Login(props) {
     const [showPassword, setShowPassword] = useState(false);
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-    
+
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
@@ -70,7 +70,7 @@ export default function Login(props) {
 
     const handleLogin = (e) => {
         e.preventDefault()
-        
+
         if (isLoggingIn) {
             return <div class="spinner"></div>;
         }
@@ -106,7 +106,7 @@ export default function Login(props) {
                     }
                 })
                 .then((res) => {
-                   
+
                     if (typeof res !== "undefined") {
                         const user = {
                             username: res.username,
@@ -179,14 +179,24 @@ export default function Login(props) {
                                             edge="end"
                                             sx={{ color: 'black' }}
                                         >
-                                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                                            {showPassword ? <VisibilityOff sx={{color:'#8d75c6'}}/> : <Visibility  sx={{color:'#8d75c6'}}/>}
                                         </IconButton>
                                     </InputAdornment>
                                 }
                                 label="Password"
                             />
                         </FormControl>
-                        <Button style={{ marginTop: '20px', backgroundColor: '#8d75c6' }} onClick={handleLogin} disabled={isLoggingIn} variant="contained">Iniciar Sesión</Button>
+
+                        {isLoggingIn ? (
+                            <div style={{ textAlign: 'center' }}>
+                                <div class="spinner" style={{color:'#8d75c6' }} />
+                                
+                            </div>
+                        ) : (
+                            <Button style={{ marginTop: '20px', backgroundColor: '#8d75c6' }} onClick={handleLogin} disabled={isLoggingIn} variant="contained">Iniciar Sesión</Button>
+                        )}
+                        
+                        
                     </Box>
                 </Grid>
             </Grid>

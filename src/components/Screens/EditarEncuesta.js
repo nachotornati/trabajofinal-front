@@ -21,6 +21,9 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import EditarSurveyCarousel from '../Carousel-Encuestas/EditarSurveyCarousel'
+import { useContext } from 'react';
+import { AuthContext } from '../Context/AuthContext';
+
 const mdTheme = createTheme();
 
 export default function EditarEncuesta(props) {
@@ -30,6 +33,7 @@ export default function EditarEncuesta(props) {
     const [answers, setAnswers] = useState([])
     const [comedor, setComedor] = useState("")
     const { id, idEncuesta } = useParams()
+    const {currentUser} = useContext(AuthContext)
    
     
 
@@ -41,6 +45,7 @@ export default function EditarEncuesta(props) {
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/' + idEncuesta, {
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             }
         })
             .then((response) => response.json())
