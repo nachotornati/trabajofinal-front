@@ -14,7 +14,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import EncuestaItem from '../EncuestaItem';
+import EncuestaItem from '../Helpers/EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import Carousel, { Carouselitem } from "../Carousel-Encuestas/Survey"
 import { useState } from 'react';

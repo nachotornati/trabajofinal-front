@@ -1,6 +1,6 @@
-import LandingPage from "./components/LandingPage";
+import LandingPage from "./components/Screens/LandingPage";
 import Home from "./components/Screens/Home";
-import Navigator from "./components/Navigator";
+import Navigator from "./components/Helpers/Navigator";
 import PantallaEncuestas from "./components/Screens/PantallaEncuestas";
 import Login from "./components/Screens/Login";
 import Comedor from "./components/Screens/Comedor";
@@ -33,7 +33,7 @@ function App() {
         <Route exact path='/comedor/encuestas' element={<><RequireAuth/><Navigator/><EncuestasHistoricas/></>} />
         <Route exact path='/comedor/encuesta/:idEncuesta' element={<><RequireAuth/><Navigator/><EncuestaRealizada/></>} />
         <Route exact path='/comedor/editar-encuesta/:idEncuesta' element={<><RequireAuth/><Navigator/><EditarEncuesta/></>} />
-        <Route exact path='/comedor/nueva-encuesta' element={<><RequireAuth/><Navigator/><PantallaEncuestas/></>} />
+        <Route exact path='/comedor/nueva-encuesta/:idEncuesta' element={<><RequireAuth/><Navigator/><PantallaEncuestas/></>} />
       </Routes>
     </Router>
   );

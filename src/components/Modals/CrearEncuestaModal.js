@@ -48,8 +48,8 @@ export default function CrearEncuestaModal(props) {
 
 
                         >
-                            {props.tipos.map((option) => (
-                                <MenuItem value={option}>{option}</MenuItem>
+                            {props?.tipos.map((option) => (
+                                <MenuItem value={option.id}>{option.type}</MenuItem>
                             ))
                             }
                         </Select>
@@ -62,7 +62,7 @@ export default function CrearEncuestaModal(props) {
                             <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white'}}onClick={props.handleCloseModal}>Cancelar</Button>
                         </Grid>
                         <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white'}}onClick={() => window.location.href = `/comedor/nueva-encuesta`}>Siguiente</Button>
+                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white'}}onClick={() => window.location.href = `/comedor/nueva-encuesta/${selectedValues}`}>Siguiente</Button>
 
                         </Grid>
 

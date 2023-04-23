@@ -24,7 +24,7 @@ import { TextField } from '@mui/material';
 import { ComedorContext } from '../Context/ComedorContext';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
-import CrearComedorModal from '../CrearComedorModal';
+import CrearComedorModal from '../Modals/CrearComedorModal';
 import CustomAlert from './CustomAlert';
 
 const mdTheme = createTheme();

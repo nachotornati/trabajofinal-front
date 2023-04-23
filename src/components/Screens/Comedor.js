@@ -8,7 +8,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Mapa from '../Mapa';
+import Mapa from '../Helpers/Mapa';
 import GraficoLinea from '../GraficoLinea';
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -66,8 +66,8 @@ export default function Comedor(props) {
         })
             .then((response) => response.json())
             .then((res) => {
-
-                setTipos(res.types)
+                console.log(res)
+                setTipos(res)
 
             })
             .catch((err) => {

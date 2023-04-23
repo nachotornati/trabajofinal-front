@@ -1,7 +1,7 @@
 //import "../assets/scss/constants.scss"
 //import "../assets/scss/landingPage.scss"
 //import "bootstrap/dist/css/bootstrap.min.css"
-import { Navigator } from "./Navigator"
+import { Navigator } from "../Helpers/Navigator"
 import { Home } from "./LandingPageFront"
 import { LandingPageFront } from "./LandingPageFront"
 

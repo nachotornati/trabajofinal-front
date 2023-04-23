@@ -14,7 +14,6 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
-import EncuestaItem from '../EncuestaItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import Carousel, { Carouselitem } from "../Carousel-Encuestas/Survey"
 import { useState } from 'react';
@@ -22,7 +21,7 @@ import { useEffect } from 'react';
 import Survey from '../Carousel-Encuestas/Survey';
 import { AuthContext } from '../Context/AuthContext';
 import { useContext } from 'react';
-
+import { useParams } from 'react-router-dom';
 const mdTheme = createTheme();
 
 export default function PantallaEncuestas(props) {
@@ -30,10 +29,11 @@ export default function PantallaEncuestas(props) {
     const [encuesta, setEncuesta] = useState([])
     const [preguntas, setPreguntas] = useState([])
     const { currentUser } = useContext(AuthContext)
+    const {idEncuesta } = useParams()
     
 
     const getEncuestas = () => {
-        fetch('https://trabajo-final-backend-7ezk.onrender.com/api/survey', {
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/survey/id/${idEncuesta}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': currentUser.accessToken

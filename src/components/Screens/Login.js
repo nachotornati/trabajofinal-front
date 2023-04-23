@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import * as React from 'react';
 import { useState } from "react";
-import NavigatorWithButton from "../NavigatorWithButton";
+import NavigatorWithButton from "../Helpers/NavigatorWithButton";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
 import CustomAlert from './CustomAlert'

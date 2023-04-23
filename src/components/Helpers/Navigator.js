@@ -25,7 +25,7 @@ import { NavigatorItem } from "./NavigatorItem";
 //import { auth } from "../../firebase"
 //import { signOut } from "firebase/auth";
 import { useContext } from "react";
-import { AuthContext } from "../components/Context/AuthContext";
+import { AuthContext } from "../Context/AuthContext";
 import { useEffect } from "react";
 
 
