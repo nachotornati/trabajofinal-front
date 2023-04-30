@@ -28,6 +28,7 @@ import { useContext } from 'react';
 import { ComedorContext } from '../Context/ComedorContext';
 import { AuthContext } from '../Context/AuthContext';
 import CustomAlert from './CustomAlert';
+import DownloadIcon from '@mui/icons-material/Download';
 import { useState } from 'react';
 
 
@@ -71,7 +72,44 @@ export default function EncuestasHistoricas(props) {
 
             }
      
+
     }
+
+    const handleDownloadEncuesta = (id) =>{ 
+        const confirmSubmit = window.confirm('¿Está seguro que desea descargar la encuesta?');
+            if (confirmSubmit) {
+                downloadEncuesta(id)
+                
+
+            }
+
+    }
+
+    const downloadEncuesta = (id) => {
+        
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/${id}/download/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
+            }
+        })
+            .then( (response)=> response.text())
+            .then((csvString) => {
+                const blob = new Blob([csvString], { type: 'text/csv' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${currentDinner}-encuesta.csv`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+              })
+            .catch((err) => {
+                console.log(err.message);
+            });
+    }
+
 
     const deleteEncuesta = (id) => {
 
@@ -184,6 +222,9 @@ export default function EncuestasHistoricas(props) {
                                                                 </Button>
                                                                 <Button onClick={() => handleDeleteEncuesta(encuesta.id)}>
                                                                     <DeleteIcon sx={{color: "#8d75c6"}} />
+                                                                </Button>
+                                                                <Button onClick={() => handleDownloadEncuesta(encuesta.id)}>
+                                                                    <DownloadIcon sx={{color: "#8d75c6"}} />
                                                                 </Button>
                                                             </TableCell>
                                                         </TableRow>

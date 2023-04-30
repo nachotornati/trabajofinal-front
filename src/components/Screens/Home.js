@@ -26,6 +26,7 @@ import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import CrearComedorModal from '../Modals/CrearComedorModal';
 import CustomAlert from './CustomAlert';
+import { EncuestaContext } from '../Context/EncuestaContext';
 
 const mdTheme = createTheme();
 export default function Home(props) {
@@ -39,8 +40,7 @@ export default function Home(props) {
     const { currentUser } = useContext(AuthContext);
     const { currentDinner } = useContext(ComedorContext);
     const { dispatch } = useContext(ComedorContext);
-
-    console.log("currentDinner", currentUser)
+    const { encuestaGuardada } = useContext(EncuestaContext);
 
     const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
     

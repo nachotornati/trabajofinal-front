@@ -370,17 +370,10 @@ const Survey = ({ survey,preguntas }) => {
     return (
 
 
-        <Grid container spacing={2} >
-            <Grid item xs={12} md={12} lg={12}>
-                <div className="carousel-item" >
-                    <Grid container spacing={3}>
+        
 
-                        {renderContent()}
-                    </Grid>
-                </div>
-            </Grid>
-
-        </Grid>
+        renderContent() 
+             
 
     );
 };

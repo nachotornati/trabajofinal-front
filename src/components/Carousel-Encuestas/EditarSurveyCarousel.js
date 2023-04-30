@@ -11,6 +11,8 @@ import { Button } from '@material-ui/core';
 import { Typography } from '@mui/material';
 import { AuthContext } from '../Context/AuthContext';
 import { useContext } from 'react';
+import { useEffect } from 'react';
+import EncuestaGuardadaSuccess from '../Screens/EncuestaGuardadaSuccess';
 
 
 
@@ -20,15 +22,18 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const { currentUser } = useContext(AuthContext);
-    const currentQuestionData = newAnswers[currentQuestion];
+    const [isLoading, setIsLoading] = useState(false);
+    const currentQuestionData = newAnswers.length !== 0 ? newAnswers[currentQuestion] : null;
+    //const currentQuestionData = newAnswers[currentQuestion];
     console.log("Answers", answers)
+    console.log(id)
 
     const isLastQuestion = currentQuestion === answers.length - 1;
 
     
-    const [isChecked, setIsChecked] = useState(currentQuestionData.answer.option !== undefined ? currentQuestionData.answer.option : false);
-    const [isChecked2, setIsChecked2] = useState(currentQuestionData.answer.option !== undefined ? !currentQuestionData.answer.option : false);
-    const [value, setValue] = useState(currentQuestionData.answer.value || "");
+    const [isChecked, setIsChecked] = useState(currentQuestionData.answer?.option !== undefined ? currentQuestionData.answer.option : false);
+    const [isChecked2, setIsChecked2] = useState(currentQuestionData.answer?.option !== undefined ? !currentQuestionData.answer.option : false);
+    const [value, setValue] = useState(currentQuestionData.answer?.value || "");
 
     const saveAnswers = () => {
         console.log(newAnswers)
@@ -45,6 +50,7 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
             .then((response) => response.json())
             .then((res) => {
                 console.log("Imprimir la rta:", res)
+                setIsLoading(true)
             }
             )
             .catch((err) => {
@@ -187,40 +193,38 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
             case "comment":
                 return (
                     <>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center' }} zeroMinWidth>
+                         <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
-                            <TextField variant="outlined" style={{ width: '50%' }} onChange={(e) => handleAnswerComment(currentQuestionData._id, e.target.value)}
-                                value={currentQuestionData.answer.value}></TextField>
+                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center', marginBottom:'10px'}}>
+                            <TextField variant="outlined" style={{ width: '50%' }} onChange={(e) => handleAnswerComment(currentQuestionData.question._id, e.target.value)}
+                                value={typeof currentQuestionData.answer?.value === 'undefined' ? '' : currentQuestionData.answer.value}
+                            ></TextField>
 
                         </Grid>
                         <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-
-                            {currentQuestion > 0 && <Button onClick={handlePrevious}>Anterior</Button>}
-                            <Button onClick={handleNext} >Siguiente</Button>
-
-
+                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginRight: '10px'  }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px'  }} onClick={handleNext} >Siguiente</Button>
                         </Grid>
                     </>
                 )
             case "multiselect":
                 return (
                     <>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center' }} >
+                         <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
                             <FormControl style={{ width: '75%' }}>
                                 <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    value={value}
+                                    value={currentQuestionData.answer?.value}
                                     label="Option"
                                     onChange={(e) => {
                                         handleAnswerMultiselect(currentQuestionData._id, e.target.value);
@@ -234,8 +238,8 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
                             </FormControl>
                         </Grid>
                         <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                            {currentQuestion > 0 && <Button onClick={handlePrevious}>Anterior</Button>}
-                            <Button onClick={handleNext} >Siguiente</Button>
+                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginRight: '10px'  }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px'  }} onClick={handleNext} >Siguiente</Button>
                         </Grid>
 
 
@@ -246,19 +250,18 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
             case "numerical":
                 return (
                     <>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center' }} zeroMinWidth>
+                         <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
                         <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center' }}>
                             <TextField variant="outlined" style={{ width: '50%' }} onChange={(e) => handleAnswerNumerical(currentQuestionData._id, e.target.value)}
-                               value={currentQuestionData.answer.value}> </TextField>
+                               value={typeof currentQuestionData.answer?.value === 'undefined' ? '' : currentQuestionData.answer.value}> </TextField>
                         </Grid>
                         <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                            {currentQuestion > 0 && <Button onClick={handlePrevious}>Anterior</Button>}
-                            <Button onClick={handleNext} >Siguiente</Button>
-
+                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginRight: '10px'  }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px'  }} onClick={handleNext} >Siguiente</Button>
                         </Grid>
 
                     </>
@@ -269,8 +272,8 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
                 return (
 
                     <>
-                        <Grid item xs={12} md={12} lg={12}>
-                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center' }} zeroMinWidth>
+                         <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
@@ -301,9 +304,9 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
                             </Grid>
                         ) : null
                         }
-                        <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                            {currentQuestion > 0 && <Button onClick={handlePrevious}>Anterior</Button>}
-                            <Button onClick={handleNext} >Siguiente</Button>
+                          <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginRight: '10px'  }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px'  }} onClick={handleNext} >Siguiente</Button>
                         </Grid>
                     </>
                 )
@@ -315,6 +318,10 @@ const EditarSurveyCarousel = ({ comedor, id, answers }) => {
 
     return (
 
+        isLoading ? 
+                <EncuestaGuardadaSuccess caso={"editada"}/>
+
+             : 
 
         <Grid container spacing={2} >
             <Grid item xs={12} md={12} lg={12}>

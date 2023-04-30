@@ -14,7 +14,7 @@ const mdTheme = createTheme();
 
 export default function EditarComedorModal(props) {
     
-    console.log("entre",props)
+
     const { dispatch } = useContext(ComedorContext);
     const { currentDinner } = useContext(ComedorContext);
 

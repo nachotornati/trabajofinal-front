@@ -21,6 +21,7 @@ import { ComedorContext } from '../Context/ComedorContext';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { AuthContext } from '../Context/AuthContext';
+import { EncuestaContext } from '../Context/EncuestaContext';
 import CustomAlert from './CustomAlert';
 
 const mdTheme = createTheme();
@@ -37,10 +38,12 @@ export default function Comedor(props) {
     const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
     const { currentDinner } = useContext(ComedorContext);
     const { currentUser } = useContext(AuthContext);
-
+    const { currentEncuesta} = useContext(EncuestaContext);
 
     const dispatch = useContext(ComedorContext);
 
+    //console.log(currentEncuesta)
+    console.log(typeof props.tipos);
 
     const showSuccessfulRegister = (event, reason) => {
         setOpenSuccessfulRegister(true);
@@ -108,9 +111,17 @@ export default function Comedor(props) {
     }
 
 
+    //useEffect(() => {
+      //  getTiposEncuesta()
+    //}, [])
+
     useEffect(() => {
         getTiposEncuesta()
-    }, [])
+    if (currentEncuesta) {
+            console.log('entro')
+            showSuccessfulRegister()
+        }
+      }, [currentEncuesta]);
 
 
 
@@ -269,7 +280,7 @@ export default function Comedor(props) {
                     </Container>
                     <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
                     <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
-           
+                    <CustomAlert text={"Encuesta cargada exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
                 </Box>
 
             </Box>
