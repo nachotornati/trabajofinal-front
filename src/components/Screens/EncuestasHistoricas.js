@@ -30,7 +30,8 @@ import { AuthContext } from '../Context/AuthContext';
 import CustomAlert from './CustomAlert';
 import DownloadIcon from '@mui/icons-material/Download';
 import { useState } from 'react';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import "../../assets/scss/table.scss";
 
 
 const mdTheme = createTheme();
@@ -40,22 +41,21 @@ export default function EncuestasHistoricas(props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [page, setPage] = React.useState(0);
     const [encuestas, setEncuestas] = React.useState([])
-
     const { currentDinner } = useContext(ComedorContext);
     const { currentUser } = useContext(AuthContext);
-    
-    
+
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
-      };
-    
-      const handleChangeRowsPerPage = (event) => {
+    };
+
+    const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
-      };
+    };
 
-    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
- 
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] = useState(false);
+
     const showSuccessfulRegister = (event, reason) => {
         setOpenSuccessfulRegister(true);
     };
@@ -66,45 +66,46 @@ export default function EncuestasHistoricas(props) {
 
     const handleDeleteEncuesta = (id) => {
         const confirmSubmit = window.confirm('¿Está seguro que desea eliminar la encuesta?');
-            if (confirmSubmit) {
-                deleteEncuesta(id)
-                
+        if (confirmSubmit) {
+            deleteEncuesta(id)
 
-            }
-     
+
+        }
+
 
     }
 
-    const handleDownloadEncuesta = (id) =>{ 
+    const handleDownloadEncuesta = (id) => {
         const confirmSubmit = window.confirm('¿Está seguro que desea descargar la encuesta?');
-            if (confirmSubmit) {
-                downloadEncuesta(id)
-                
+        if (confirmSubmit) {
+            downloadEncuesta(id)
 
-            }
+
+        }
 
     }
 
-    const downloadEncuesta = (id) => {
-        
-        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/${id}/download/`, {
+    const downloadEncuesta = (encuesta) => {
+
+        fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/answers/id/${encuesta.id}/download/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': currentUser.accessToken
             }
         })
-            .then( (response)=> response.text())
+            .then((response) => response.text())
             .then((csvString) => {
                 const blob = new Blob([csvString], { type: 'text/csv' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.download = `${currentDinner}-encuesta.csv`;
+                link.download = `${currentDinner.nombre}-${formatDate(encuesta.date)}-encuesta.csv`;
+                console.log(`${currentDinner}-encuesta.csv`)
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-              })
+            })
             .catch((err) => {
                 console.log(err.message);
             });
@@ -191,9 +192,18 @@ export default function EncuestasHistoricas(props) {
                             <Grid container spacing={1}>
                                 <Grid item xs={12}>
                                     <Paper sx={{ p: 2 }}>
-                                        <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center' ,color: "#8d75c6"}}>
-                                            Encuestas Históricas del {currentDinner.nombre}
-                                        </Typography>
+                                        <Grid container alignItems="center" spacing={1}>
+                                            <Grid item>
+                                                <Button style={{color: '#8d75c6' }} onClick={() => window.location.href = `/comedor`}>
+                                                    <ArrowBackIcon  />
+                                                </Button>
+                                            </Grid>
+                                            <Grid item xs={12}>
+                                                <Typography variant="h4" component="div" gutterBottom sx={{ textAlign: 'center', color: "#8d75c6" }}>
+                                                    Encuestas Históricas del {currentDinner.nombre}
+                                                </Typography>
+                                            </Grid>
+                                        </Grid>
                                         <TableContainer>
                                             <Table>
                                                 <TableHead>
@@ -205,30 +215,30 @@ export default function EncuestasHistoricas(props) {
                                                     </TableRow>
                                                 </TableHead>
                                                 <TableBody>
-                                                
-                                                    { encuestas
-                                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                                    .map(encuesta => (
-                                                        <TableRow key={encuesta.id}>
-                                                            <TableCell>{formatDate(encuesta.date)}</TableCell>
-                                                            <TableCell>{encuesta.survey_type}</TableCell>
-                                                            <TableCell style={{ textAlign: 'center' }}>{encuesta.surver}</TableCell>
-                                                            <TableCell style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                                                                <Button onClick={() => (window.location.href = `/comedor/encuesta/${encuesta.id}`)}>
-                                                                    <VisibilityIcon sx={{color: "#8d75c6"}} />
-                                                                </Button>
-                                                                <Button onClick={() => (window.location.href = `/comedor/editar-encuesta/${encuesta.id}`)}>
-                                                                    <EditIcon sx={{color: "#8d75c6"}}/>
-                                                                </Button>
-                                                                <Button onClick={() => handleDeleteEncuesta(encuesta.id)}>
-                                                                    <DeleteIcon sx={{color: "#8d75c6"}} />
-                                                                </Button>
-                                                                <Button onClick={() => handleDownloadEncuesta(encuesta.id)}>
-                                                                    <DownloadIcon sx={{color: "#8d75c6"}} />
-                                                                </Button>
-                                                            </TableCell>
-                                                        </TableRow>
-                                                    ))}
+
+                                                    {encuestas
+                                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                        .map(encuesta => (
+                                                            <TableRow key={encuesta.id} >
+                                                                <TableCell>{formatDate(encuesta.date)}</TableCell>
+                                                                <TableCell>{encuesta.survey_type}</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', whiteSpace: 'nowrap' }}>{encuesta.surver}</TableCell>
+                                                                <TableCell style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+                                                                    <Button onClick={() => (window.location.href = `/comedor/encuesta/${encuesta.id}`)} >
+                                                                        <VisibilityIcon sx={{ color: "#8d75c6" }} />
+                                                                    </Button>
+                                                                    <Button onClick={() => (window.location.href = `/comedor/editar-encuesta/${encuesta.id}`)} >
+                                                                        <EditIcon sx={{ color: "#8d75c6" }} />
+                                                                    </Button>
+                                                                    <Button onClick={() => handleDeleteEncuesta(encuesta.id)} >
+                                                                        <DeleteIcon sx={{ color: "#8d75c6" }} />
+                                                                    </Button>
+                                                                    <Button onClick={() => handleDownloadEncuesta(encuesta)} >
+                                                                        <DownloadIcon sx={{ color: "#8d75c6", marginTop:'5px' }} />
+                                                                    </Button>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))}
                                                 </TableBody>
                                             </Table>
                                         </TableContainer>

@@ -102,11 +102,7 @@ export default function Comedor(props) {
             .then((response) => response.json())
             .then((res) => {
                 handleModalClose()
-                //window.location.href = '/home'
-                //showSuccessfulRegister()
-
-
-                //Mandar a pagina home
+                window.location.href = '/home'
             })
     }
 

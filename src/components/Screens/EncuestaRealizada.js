@@ -9,6 +9,8 @@ import FormControl from '@mui/joy/FormControl';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import CssBaseline from '@mui/material/CssBaseline';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Checkbox } from '@mui/material';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Input from '@mui/joy/Input';
 import { Link } from '@mui/material';
@@ -18,7 +20,9 @@ const EncuestaRealizada = () => {
     const [survey, setSurvey] = useState([]);
     const { idEncuesta } = useParams()
     const [answers, setAnswers] = useState([]);
-    const {currentUser}=useContext(AuthContext);
+    const { currentUser } = useContext(AuthContext);
+    const [isChecked, setIsChecked] = useState(false);
+    const [isChecked2, setIsChecked2] = useState(false);
 
 
 
@@ -74,26 +78,126 @@ const EncuestaRealizada = () => {
                                         display: 'flex',
                                         flexDirection: 'column',
                                         alignItems: 'center',
-                                        
+
                                     }}>
+                                    <Grid container justifyContent="flex-start" alignItems="center">
 
-                                    {answers.map((pregunta) => {
-                                        return (
-                                            <>
-
-                                                <FormLabel style={{marginTop:'30px',color:'#8d75c6'}}>{pregunta.question.legend}</FormLabel>
-                                                <TextField style={{marginTop:'10px'}} value={pregunta.answer.value} />
-                                            </>
-
-
-                                        )
-                                    })}
-                                    <Grid item xs={12} style={{marginTop:'20px'}}>
-                                        <Button style={{color:'#8d75c6'}} onClick={() => window.location.href = `/comedor/encuestas`}>
-                                            Volver
+                                        <Button
+                                            style={{ color: '#8d75c6' }}
+                                            onClick={() => (window.location.href = '/comedor/encuestas')}
+                                        >
+                                            <ArrowBackIcon  />
                                         </Button>
+
                                     </Grid>
-                                </Paper>
+                                    {answers.map((pregunta) => {
+                                        console.log(pregunta)
+                                        return (
+                                            <React.Fragment key={pregunta.question._id}  >
+                                                <Grid item xs={12} style={{ marginTop: '30px', color: '#8d75c6' }}>
+                                                    <FormLabel >{pregunta.question.legend}</FormLabel>
+                                                </Grid>
+                                                <Grid item xs={12}>
+                                                    {pregunta.question.type === 'select_comment' ? (
+                                                        pregunta.answer.option ? (
+                                                            <>
+                                                                <Grid
+                                                                    container
+                                                                    spacing={2}
+                                                                    style={{
+                                                                        display: 'flex',
+                                                                        justifyContent: 'center',
+                                                                        marginTop: '0.25rem',
+                                                                        marginBottom: '0.25rem',
+                                                                    }}
+                                                                >
+                                                                    <Grid item xs={6}>
+                                                                        <FormControlLabel
+                                                                            value="bottom"
+                                                                            control={
+                                                                                <Checkbox style={{ color: '#8d75c6' }} />
+                                                                            }
+                                                                            label="SI"
+                                                                            labelPlacement="bottom"
+                                                                            checked={true}
+                                                                            disabled
+                                                                        />
+                                                                    </Grid>
+                                                                    <Grid item xs={6}>
+                                                                        <FormControlLabel
+                                                                            value="bottom"
+                                                                            control={
+                                                                                <Checkbox style={{ color: '#8d75c6' }} />
+                                                                            }
+                                                                            label="NO"
+                                                                            labelPlacement="bottom"
+                                                                            checked={false}
+                                                                            disabled
+                                                                        />
+                                                                    </Grid>
+                                                                </Grid>
+                                                                <Grid item xs={12}>
+                                                                    <TextField style={{ marginTop: '10px' }} value={pregunta.answer.value} />
+                                                                </Grid>
+                                                            </>
+
+                                                        ) : (
+
+                                                            <Grid
+                                                                container
+                                                                spacing={2}
+                                                                style={{
+                                                                    display: 'flex',
+                                                                    justifyContent: 'center',
+                                                                    marginTop: '0.25rem',
+                                                                    marginBottom: '0.25rem',
+                                                                }}
+                                                            >
+                                                                <Grid item xs={6}>
+                                                                    <FormControlLabel
+                                                                        value="bottom"
+                                                                        control={
+                                                                            <Checkbox style={{ color: '#8d75c6' }} />
+                                                                        }
+                                                                        label="SI"
+                                                                        labelPlacement="bottom"
+                                                                        checked={false}
+                                                                        disabled
+                                                                    />
+                                                                </Grid>
+                                                                <Grid item xs={6}>
+                                                                    <FormControlLabel
+                                                                        value="bottom"
+                                                                        control={
+                                                                            <Checkbox style={{ color: '#8d75c6' }} />
+                                                                        }
+                                                                        label="NO"
+                                                                        labelPlacement="bottom"
+                                                                        checked={true}
+                                                                        disabled
+                                                                    />
+                                                                </Grid>
+                                                            </Grid>
+
+                                                        )
+                                                    ) : (
+                                                        <TextField style={{ marginTop: '10px' }} value={pregunta.answer.value} />
+                                                    )}
+
+
+
+
+
+
+
+                                                </Grid>
+                                            </React.Fragment>
+                                        );
+                                    })}
+
+
+                                    <div style={{ marginBottom: '30px' }} />
+                                </Paper >
                             </Grid>
                         </Grid>
                     </Container>

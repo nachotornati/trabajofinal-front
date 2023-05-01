@@ -18,7 +18,9 @@ import TextField from '@mui/material/TextField';
 import { MenuItem, Select, InputLabel, FormControlLabel, Checkbox } from '@mui/material';
 import { ComedorContext } from '../Context/ComedorContext';
 import { EncuestaContext } from '../Context/EncuestaContext';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import EncuestaGuardadaSuccess from './EncuestaGuardadaSuccess';
+import LoadingSpinner from '../Helpers/LoadingSpinner';
 const mdTheme = createTheme();
 
 export default function PantallaEncuestas(props) {
@@ -30,12 +32,13 @@ export default function PantallaEncuestas(props) {
     const [answers, setAnswers] = useState({});
     const { currentUser } = useContext(AuthContext)
     const { currentDinner } = useContext(ComedorContext)
-    
+
     const [isLoading, setIsLoading] = useState(false);
     const { idEncuesta } = useParams()
+    const [showButton, setShowButton] = useState(false);
 
-    
-   
+
+
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const currentQuestionData = preguntas.length !== 0 ? preguntas[currentQuestion] : null;
@@ -52,6 +55,7 @@ export default function PantallaEncuestas(props) {
             setIsChecked2(currentQuestionData?.answer.option !== undefined ? !currentQuestionData.answer.option : false);
         }
     }, [currentQuestion, preguntas]);
+
 
 
     const saveAnswers = () => {
@@ -96,17 +100,17 @@ export default function PantallaEncuestas(props) {
             .then((res) => {
                 console.log("Imprimir la rta:", res)
                 setIsLoading(true)
-               
+
 
             }
             )
             .catch((err) => {
                 console.log(err.message);
             });
-        
-            
-            
-            
+
+
+
+
 
 
     }
@@ -147,7 +151,7 @@ export default function PantallaEncuestas(props) {
             })
         )
     };
-  
+
 
     const handleAnswerSelectComment = (questionId, isChecked, value) => {
         setPreguntas((prevAnswers) => {
@@ -228,11 +232,11 @@ export default function PantallaEncuestas(props) {
             const confirmSubmit = window.confirm('¿Está seguro que desea enviar la encuesta?');
             if (confirmSubmit) {
                 //Probar esto
-                
+
                 saveAnswers();
 
                 //if (isLoading === false) {
-                    //window.addEventListener('beforeunload', saveAnswers);
+                //window.addEventListener('beforeunload', saveAnswers);
                 //    window.location.href = "/comedor";
                 //}
             }
@@ -298,8 +302,16 @@ export default function PantallaEncuestas(props) {
         getEncuestas()
     }, [])
 
-    const renderContent = () => {
+    useEffect(() => {
+        if (encuesta.length !== 0) {
+          setShowButton(true);
+        } else {
+          setShowButton(false);
+        }
+      }, [encuesta]);
 
+    const renderContent = () => {
+        
         switch (currentQuestionData.question.type) {
             case "comment":
                 return (
@@ -309,16 +321,16 @@ export default function PantallaEncuestas(props) {
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
-                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center', marginBottom:'10px'}}>
+                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
                             <TextField variant="outlined" style={{ width: '50%' }} onChange={(e) => handleAnswerComment(currentQuestionData.question._id, e.target.value)}
                                 value={typeof currentQuestionData.answer.value === 'undefined' ? '' : currentQuestionData.answer.value}
                             ></TextField>
 
                         </Grid>
                         <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
-    {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
-    <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px' }} onClick={handleNext} >Siguiente</Button>
-  </Grid>
+                            {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px' }} onClick={handleNext} >Siguiente</Button>
+                        </Grid>
                     </>
                 )
             case "multiselect":
@@ -349,9 +361,9 @@ export default function PantallaEncuestas(props) {
                             </FormControl>
                         </Grid>
                         <Grid container justifyContent="center" alignItems="center">
-    {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
-    <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px' }} onClick={handleNext} >Siguiente</Button>
-  </Grid>
+                            {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px' }} onClick={handleNext} >Siguiente</Button>
+                        </Grid>
 
 
 
@@ -362,21 +374,21 @@ export default function PantallaEncuestas(props) {
             case "numerical":
                 return (
                     <>
-  <Grid item xs={12} md={12} lg={12}>
-    <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
-      {currentQuestionData.question.legend}
-    </Typography>
-  </Grid>
-  <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center',  marginTop: '1rem', marginBottom: '1rem' }}>
-    <TextField variant="outlined" type="number" style={{ width: '50%' }} onChange={(e) => handleAnswerNumerical(currentQuestionData.question._id, e.target.value)}
-      value={typeof currentQuestionData.answer.value === 'undefined' ? '' : currentQuestionData.answer.value}
-    />
-  </Grid>
-  <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%',marginTop: '10px'  }}>
-    {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
-    <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px'}} onClick={handleNext}>Siguiente</Button>
-  </Grid>
-</>
+                        <Grid item xs={12} md={12} lg={12}>
+                            <Typography variant="h6" id="tableTitle" component="div" style={{ display: 'flex', justifyContent: 'center', color: '#8d75c6' }} zeroMinWidth>
+                                {currentQuestionData.question.legend}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={12} lg={12} style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
+                            <TextField variant="outlined" type="number" style={{ width: '50%' }} onChange={(e) => handleAnswerNumerical(currentQuestionData.question._id, e.target.value)}
+                                value={typeof currentQuestionData.answer.value === 'undefined' ? '' : currentQuestionData.answer.value}
+                            />
+                        </Grid>
+                        <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: '10px' }}>
+                            {currentQuestion > 0 && <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant='contained' style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px' }} onClick={handleNext}>Siguiente</Button>
+                        </Grid>
+                    </>
                 )
             case "select_comment":
                 return (
@@ -387,7 +399,7 @@ export default function PantallaEncuestas(props) {
                                 {currentQuestionData.question.legend}
                             </Typography>
                         </Grid>
-                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center',marginTop: '1rem', marginBottom: '1rem'  }}>
+                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center', marginTop: '1rem', marginBottom: '1rem' }}>
                             <FormControlLabel
                                 value="bottom"
                                 control={<Checkbox style={{ color: '#8d75c6' }} />}
@@ -398,7 +410,7 @@ export default function PantallaEncuestas(props) {
                                 onChange={handleCheck}
                             />
                         </Grid>
-                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', justifyContent: 'center',marginTop: '1rem', marginBottom: '1rem'  }}>
                             <FormControlLabel
                                 value="bottom"
                                 control={<Checkbox style={{ color: '#8d75c6' }} />}
@@ -416,9 +428,9 @@ export default function PantallaEncuestas(props) {
                             </Grid>
                         ) : null
                         }
-                        <Grid style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginRight: '10px'  }} onClick={handlePrevious}>Anterior</Button>}
-                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white',marginLeft: '10px'  }} onClick={handleNext} >Siguiente</Button>
+<Grid container justifyContent="center" style={{ marginBottom: '1rem' }}>
+                            {currentQuestion > 0 && <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white', marginRight: '10px' }} onClick={handlePrevious}>Anterior</Button>}
+                            <Button variant="contained" style={{ backgroundColor: '#8d75c6', color: 'white', marginLeft: '10px' }} onClick={handleNext} >Siguiente</Button>
                         </Grid>
                     </>
                 )
@@ -430,62 +442,67 @@ export default function PantallaEncuestas(props) {
 
     return (
 
-        
-
-        isLoading ? 
-                <EncuestaGuardadaSuccess caso={"guardada"}/>
-
-             : 
-            
-
-                <ThemeProvider theme={mdTheme}>
-                    <Box sx={{ display: 'flex' }}>
-                        <CssBaseline />
-                        <Box
-                            component="main"
-                            sx={{
-                                backgroundColor: (theme) =>
-                                    theme.palette.mode === 'light'
-                                        ? theme.palette.grey[100]
-                                        : theme.palette.grey[900],
-                                flexGrow: 1,
-                                height: '100vh',
-                                overflow: 'auto',
-                            }}
-                        >
 
 
-                            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                                <Grid container spacing={1} >
-                                    <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                                        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%' }}>
+        isLoading ?
+            <EncuestaGuardadaSuccess caso={"guardada"} />
 
-                                            <Grid container spacing={2} >
-                                                <Grid item xs={12} md={12} lg={12}>
-                                                    <div className="carousel-item" >
-                                                        <Grid container spacing={3}>
+            :
 
 
+            <ThemeProvider theme={mdTheme}>
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <Box
+                        component="main"
+                        sx={{
+                            backgroundColor: (theme) =>
+                                theme.palette.mode === 'light'
+                                    ? theme.palette.grey[100]
+                                    : theme.palette.grey[900],
+                            flexGrow: 1,
+                            height: '100vh',
+                            overflow: 'auto',
+                        }}
+                    >
 
-                                                            {encuesta.length != 0 ? renderContent() : <div>Cargando encuesta...</div>}
 
-                                                        </Grid>
-                                                    </div>
-                                                </Grid>
+                        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+
+                            <Grid container spacing={1} >
+                                <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', width: '100%'}}>
+
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} md={12} lg={12}>
+                                                <div className="carousel-item" >
+                                                    {showButton && (
+                                                        <Button onClick={() => window.location.href = '/comedor'} sx={{ mb: 2 }} style={{ backgroundColor: 'transparent' }}>
+                                                            <ArrowBackIcon sx={{ color: '#8d75c6' }} />
+                                                        </Button>
+
+                                                    )}
+
+                                                    <Grid container spacing={3} >
+                                                        {showButton? renderContent() : <LoadingSpinner />}
+
+                                                    </Grid>
+                                                </div>
                                             </Grid>
+                                        </Grid>
 
 
 
 
-                                        </Paper>
-                                    </Grid>
+                                    </Paper>
                                 </Grid>
-                            </Container>
-                        </Box>
+                            </Grid>
+                        </Container>
                     </Box>
-                </ThemeProvider>
+                </Box>
+            </ThemeProvider>
 
-            
+
     );
 
 }
