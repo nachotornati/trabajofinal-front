@@ -9,6 +9,7 @@ import { TextField } from '@mui/material';
 import CustomAlert from '../Screens/CustomAlert';
 import { AuthContext } from '../Context/AuthContext';
 import { useContext } from 'react';
+import "../../assets/scss/modal.scss";
 const mdTheme = createTheme();
 
 
@@ -73,10 +74,10 @@ export default function CrearComedorModal(props) {
         return (
             <Modal open={props.open} onClose={props.handleCloseModal} >
 
-                <div className="modal-container">
+                <div className="modal-c-container">
                     <div className="modal-content">
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
+                            <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom  style={{marginBottom: '20px'}}>
                                 Nuevo Comedor
                             </Typography>
                         </Grid>

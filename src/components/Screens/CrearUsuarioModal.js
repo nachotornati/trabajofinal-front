@@ -118,11 +118,31 @@ export default function CrearUsuarioModal(props) {
 
       // Función para crear un nuevo usuario
     const createUser = (userData) => {
-        // Lógica para crear un nuevo usuario en la base de datos o API
+        if (!name || !lastname || !userName || !email || !password || !confirmPassword || selectedValues.length === 0) {
+            alert("Please fill all the required fields");
+            return;
+        }
+        
+        // Validar que las contraseñas coincidan
         if (password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
+    
+        // Validar formato del email con una expresión regular
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+            alert("Please enter a valid email");
+            return;
+        }
+    
+        // Validar que la contraseña tenga al menos 8 caracteres
+        if (password.length < 8) {
+            alert("Password must have at least 8 characters");
+            return;
+        }
+    
+        // Lógica para crear un nuevo usuario en la base de datos o API
         const newUser = {
             first_name: name,
             last_name: lastname,
@@ -132,19 +152,15 @@ export default function CrearUsuarioModal(props) {
             roles: selectedValues
         }
         console.log(newUser)
-
+    
         fetch('https://trabajo-final-backend-7ezk.onrender.com/api/auth/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(newUser)
-
-
-
-
         })
-
+    
         console.log("Usuario creado correctamente")
         props.updateUsers()
         setName("");
@@ -155,8 +171,9 @@ export default function CrearUsuarioModal(props) {
         setConfirmPassword("");
         setSelectedValues([]);
         props.handleCloseModal()
-
+    
     }
+    
     return (
         <Modal open={props.open} onClose={props.handleCloseModal}>
             <div className="modal-container">
@@ -213,7 +230,15 @@ export default function CrearUsuarioModal(props) {
                         }
                 </div>
             </div>
+            <CustomAlert text={"Completa todos los campos requeridos!"} severity={"error"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+            <CustomAlert text={"Las contraseñas no coinciden!"} severity={"error"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+            <CustomAlert text={"Ingresa un mail valido!"} severity={"error"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+            <CustomAlert text={"La contraseña debe tener al menos 8 caracteres!"} severity={"error"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
+
         </Modal>
+
+        
     )
+    
 
 }

@@ -25,3 +25,41 @@
   .MuiBackdrop-root {
     background-color: rgba(0, 0, 0, 0.5);
   }
+
+  .modal-c-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  width: 70%; /* Set the width to 80% of the screen */
+  max-width: 400px; /* Set a maximum width */
+  height: 70%; /* Set the height to 70% of the screen */
+  max-height: 400px; /* Set a maximum height */
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+  }
+
+  .modal-u-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    width: 80%; /* Set the width to 80% of the screen */
+    max-width: 500px; /* Set a maximum width */
+    height: 85%; /* Set the height to 70% of the screen */
+    max-height: 650px; /* Set a maximum height */
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5);
+    }

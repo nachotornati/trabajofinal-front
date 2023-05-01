@@ -33,11 +33,11 @@ import CustomAlert from './CustomAlert';
 const mdTheme = createTheme();
 const useStyles = makeStyles({
     root: {
-      '& .MuiInputBase-input': {
-        padding: 0,
-      },
+        '& .MuiInputBase-input': {
+            padding: 0,
+        },
     },
-  });
+});
 
 export default function Gestion(props) {
     const classes = useStyles();
@@ -99,8 +99,8 @@ export default function Gestion(props) {
         setPage(0);
     };
 
-    const [openSuccessfulRegister, setOpenSuccessfulRegister] =useState(false);
- 
+    const [openSuccessfulRegister, setOpenSuccessfulRegister] = useState(false);
+
     const showSuccessfulRegister = (event, reason) => {
         setOpenSuccessfulRegister(true);
     };
@@ -109,7 +109,7 @@ export default function Gestion(props) {
         setOpenSuccessfulRegister(false);
     };
 
-    const [openSuccessfulEdit, setOpenSuccessfulEdit] =useState(false);
+    const [openSuccessfulEdit, setOpenSuccessfulEdit] = useState(false);
     const showSuccessfulEditUser = (event, reason) => {
         setOpenSuccessfulEdit(true);
     };
@@ -117,13 +117,44 @@ export default function Gestion(props) {
         setOpenSuccessfulEdit(false);
     };
 
-    const [openSuccessfulDelete, setOpenSuccessfulDelete] =useState(false);
+    const [openSuccessfulDelete, setOpenSuccessfulDelete] = useState(false);
     const showSuccessfulDeleteUser = (event, reason) => {
         setOpenSuccessfulDelete(true);
     };
     const closeSuccessfulDeleteUser = (event, reason) => {
         setOpenSuccessfulDelete(false);
     };
+    const [openInvalidMail, setOpenInvalidMail] = useState(false);
+    const showInvalidMail = (event, reason) => {
+        setOpenInvalidMail(true);
+    };
+    const closeInvalidMail = (event, reason) => {
+        setOpenInvalidMail(false);
+    };
+
+    const [openUnmatchingPasswords, setOpenUnmatchingPasswords] = useState(false);
+    const showUnmatchingPasswords = (event, reason) => {
+        setOpenUnmatchingPasswords(true);
+    };
+    const closeUnmatchingPasswords = (event, reason) => {
+        setOpenUnmatchingPasswords(false);
+    };
+    const [openInvalidPassword, setOpenInvalidPassword] = useState(false);
+    const showInvalidPassword = (event, reason) => {
+        setOpenInvalidPassword(true);
+    };
+    const closeInvalidPassword = (event, reason) => {
+        setOpenInvalidPassword(false);
+    };
+
+    const [openRequiredFields, setOpenRequiredFields] = useState(false);
+    const showRequiredFields = (event, reason) => {
+        setOpenRequiredFields(true);
+    };
+    const closeRequiredFields = (event, reason) => {
+        setOpenRequiredFields(false);
+    };
+
 
     //Ver por que no se actualiza al toque
     useEffect(() => {
@@ -150,11 +181,31 @@ export default function Gestion(props) {
 
     // Función para crear un nuevo usuario
     const createUser = (userData) => {
-        // Lógica para crear un nuevo usuario en la base de datos o API
-        if (password !== confirmPassword) {
-            alert("Passwords do not match");
+        if (!name || !lastname || !userName || !email || !password || !confirmPassword || selectedValues.length === 0) {
+            showRequiredFields()
             return;
         }
+
+        // Validar que las contraseñas coincidan
+        if (password !== confirmPassword) {
+            showUnmatchingPasswords()
+            return;
+        }
+
+        // Validar formato del email con una expresión regular
+        const emailRegex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
+        if (!emailRegex.test(email)) {
+            showInvalidMail()
+            return;
+        }
+
+        // Validar que la contraseña tenga al menos 8 caracteres
+        if (password.length < 8) {
+            showInvalidPassword()
+            return;
+        }
+
+        // Lógica para crear un nuevo usuario en la base de datos o API
         const newUser = {
             first_name: name,
             last_name: lastname,
@@ -169,17 +220,12 @@ export default function Gestion(props) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-access-token': currentUser.accessToken
             },
             body: JSON.stringify(newUser)
-
-
-
-
         })
 
-        showSuccessfulRegister()
-        setUsers([...users, newUser])
+        console.log("Usuario creado correctamente")
+        props.updateUsers()
         setName("");
         setLastName("");
         setUserName("");
@@ -187,11 +233,11 @@ export default function Gestion(props) {
         setPassword("");
         setConfirmPassword("");
         setSelectedValues([]);
-        setCreateUserDialogOpen(false);
+        props.handleCloseModal()
 
     }
     const handleEditUser = (user) => {
-        
+
         setModalFlag(true)
         setSelectedUser(user)
         setName(user.first_name);
@@ -207,7 +253,7 @@ export default function Gestion(props) {
     const editUser = () => {
         // Send PUT request to update user info in the backend
         if (password !== confirmPassword) {
-            alert("Passwords do not match");
+            showUnmatchingPasswords()
             return;
         }
         const updatedUser = {
@@ -256,7 +302,7 @@ export default function Gestion(props) {
             });
         //Chequear esto
 
-       
+
     };
 
 
@@ -288,17 +334,17 @@ export default function Gestion(props) {
         setConfirmPassword("");
         setSelectedValues([]);
         setCreateUserDialogOpen(false)
-    
+
     }
 
     const handleDeleteUser = (user) => {
         const confirmSubmit = window.confirm('¿Está seguro que desea eliminar el usuario?');
-            if (confirmSubmit) {
-                deleteUser(user)
-                
+        if (confirmSubmit) {
+            deleteUser(user)
 
-            }
-     
+
+        }
+
     }
 
     const deleteUser = (user) => {
@@ -316,7 +362,7 @@ export default function Gestion(props) {
                 }
                 showSuccessfulDeleteUser()
                 return response.json();
-                
+
             }
             )
             .then((data) => {
@@ -372,7 +418,7 @@ export default function Gestion(props) {
                                             </Grid>
                                             <Grid item xs={6} md={6} lg={6} >
                                                 <Button
-                                                    sx={{ backgroundColor: '#8d75c6', padding:0 }}
+                                                    sx={{ backgroundColor: '#8d75c6', padding: 0 }}
                                                     variant="contained"
                                                     style={{ width: '100%', height: '100%' }}
                                                     onClick={() => setCreateUserDialogOpen(true)}
@@ -385,33 +431,33 @@ export default function Gestion(props) {
                                                     <Table>
                                                         <TableHead>
                                                             <TableRow>
-                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Nombre</TableCell>
-                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}} >Apellido</TableCell>
-                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}} >Usuario</TableCell>
-                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Dirección de correo electrónico</TableCell>
-                                                                <TableCell style={{textAlign:'center',color:'#8d75c6'}}>Acciones</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', color: '#8d75c6' }}>Nombre</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', color: '#8d75c6' }} >Apellido</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', color: '#8d75c6' }} >Usuario</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', color: '#8d75c6' }}>Dirección de correo electrónico</TableCell>
+                                                                <TableCell style={{ textAlign: 'center', color: '#8d75c6' }}>Acciones</TableCell>
                                                             </TableRow>
                                                         </TableHead>
                                                         <TableBody>
                                                             {users && users
-                                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                                            .map((user) => (
-                                                                <TableRow key={user.id}>
-                                                                    <TableCell style={{textAlign:'center'}} >{user.first_name}</TableCell>
-                                                                    <TableCell style={{textAlign:'center'}}>{user.last_name}</TableCell>
-                                                                    <TableCell style={{textAlign:'center'}}>{user.username}</TableCell>
-                                                                    <TableCell style={{textAlign:'center'}}>{user.email}</TableCell>
-                                                                    <TableCell style={{textAlign:'center'}}>
-                                                                        {/* onClick={() => setSelectedUser(user)}*/}
-                                                                        <Button onClick={() => handleEditUser(user)}>
-                                                                            <EditIcon sx={{color:'#8d75c6'}} />
-                                                                        </Button>
-                                                                        <Button onClick={() => handleDeleteUser(user)} >
-                                                                            <DeleteIcon sx={{color:'#8d75c6'}}  />
-                                                                        </Button>
-                                                                    </TableCell>
-                                                                </TableRow>
-                                                            ))}
+                                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                                .map((user) => (
+                                                                    <TableRow key={user.id}>
+                                                                        <TableCell style={{ textAlign: 'center' }} >{user.first_name}</TableCell>
+                                                                        <TableCell style={{ textAlign: 'center' }}>{user.last_name}</TableCell>
+                                                                        <TableCell style={{ textAlign: 'center' }}>{user.username}</TableCell>
+                                                                        <TableCell style={{ textAlign: 'center' }}>{user.email}</TableCell>
+                                                                        <TableCell style={{ textAlign: 'center' }}>
+                                                                            {/* onClick={() => setSelectedUser(user)}*/}
+                                                                            <Button onClick={() => handleEditUser(user)}>
+                                                                                <EditIcon sx={{ color: '#8d75c6' }} />
+                                                                            </Button>
+                                                                            <Button onClick={() => handleDeleteUser(user)} >
+                                                                                <DeleteIcon sx={{ color: '#8d75c6' }} />
+                                                                            </Button>
+                                                                        </TableCell>
+                                                                    </TableRow>
+                                                                ))}
                                                         </TableBody>
                                                     </Table>
                                                 </TableContainer>
@@ -435,53 +481,56 @@ export default function Gestion(props) {
                     <CustomAlert text={"Usuario eliminado exitosamente!"} severity={"success"} open={openSuccessfulDelete} closeAction={closeSuccessfulDeleteUser} />
                     <CustomAlert text={"Usuario creado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
                     <CustomAlert text={"Datos acutalizados exitosamente!"} severity={"success"} open={openSuccessfulEdit} closeAction={closeSuccessfulEditUser} />
-                        
+                    <CustomAlert text={"Completa todos los campos requeridos!"} severity={"error"} open={openRequiredFields} closeAction={closeRequiredFields} />
+                    <CustomAlert text={"Las contraseñas no coinciden!"} severity={"error"} open={openUnmatchingPasswords} closeAction={closeUnmatchingPasswords} />
+                    <CustomAlert text={"Ingresa un mail valido!"} severity={"error"} open={openInvalidMail} closeAction={closeInvalidMail} />
+                    <CustomAlert text={"La contraseña debe tener al menos 8 caracteres!"} severity={"error"} open={openInvalidPassword} closeAction={closeInvalidPassword} />
+
                 </Box>
             </ThemeProvider>
 
             {/* Diálogo para crear usuario */}
             <Modal open={createUserDialogOpen} onClose={handleCloseModal}>
 
-            <div className="modal-container">
-                <div className="modal-content"  >
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                <div className="modal-u-container">
+                    <div className="modal-content"  >
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                             <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
                                 Crear Usuario
                             </Typography>
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Nombre" value={name} onChange={handleNameChange}  />
-                       
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Nombre" value={name} onChange={handleNameChange} />
+
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Apellido" value={lastname} onChange={handleLastNameChange}  />
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Apellido" value={lastname} onChange={handleLastNameChange} />
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Nombre de Usuario" value={userName} onChange={handleUserNameChange}  />
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Nombre de Usuario" value={userName} onChange={handleUserNameChange} />
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Dirección de correo electrónico" value={email} onChange={handleEmailChange}  />
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Dirección de correo electrónico" value={email} onChange={handleEmailChange} />
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Contraseña" value={password} type="password" onChange={handlePasswordChange}  />
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Contraseña" value={password} type="password" onChange={handlePasswordChange} />
                         </Grid>
 
-                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
-                            <TextField label="Confirmar contraseña" type="password" value={confirmPassword} onChange={handleConfirmPasswordChange}  />
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                            <TextField label="Confirmar contraseña" type="password" value={confirmPassword} onChange={handleConfirmPasswordChange} />
                         </Grid>
 
-                        <Grid item xs={12 } style={{ display: 'flex', justifyContent: 'center', height: '100%'  }}>
+                        <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
                                     id="demo-simple-select"
-                                    multiple
                                     value={selectedValues}
                                     onChange={handleChange}
                                     label="Option"
@@ -494,18 +543,18 @@ export default function Gestion(props) {
 
                     </div>
 
-                    <div style={{marginTop:'20px'}}>
-                    <Grid container spacing={2}>
-                    <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={() => handleCloseModal()}>Cancelar</Button>
-                    </Grid>
-                    <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        {modalFlag ?
-                            (<Button variant='contained' style={{backgroundColor:'#8d75c6'}}onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
-                                <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
-                        }
+                    <div style={{ marginTop: '20px' }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                <Button variant="contained" style={{ backgroundColor: '#8d75c6' }} onClick={() => handleCloseModal()}>Cancelar</Button>
+                            </Grid>
+                            <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
+                                {modalFlag ?
+                                    (<Button variant='contained' style={{ backgroundColor: '#8d75c6' }} onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
+                                        <Button variant="contained" style={{ backgroundColor: '#8d75c6' }} onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
+                                }
+                            </Grid>
                         </Grid>
-                    </Grid>
                     </div>
 
                 </div>
