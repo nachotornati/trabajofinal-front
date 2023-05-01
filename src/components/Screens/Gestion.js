@@ -63,7 +63,7 @@ export default function Gestion(props) {
 
 
     const handleChange = (event) => {
-        setSelectedValues(event.target.value);
+        setSelectedValues([event.target.value]);
     };
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -155,6 +155,13 @@ export default function Gestion(props) {
         setOpenRequiredFields(false);
     };
 
+    const [openCreationError, setOpenCreationError] = useState(false);
+    const showCreationError = (event, reason) => {
+        setOpenCreationError(true);
+    };
+    const closeCreationError = (event, reason) => {
+        setOpenCreationError(false);
+    };
 
     //Ver por que no se actualiza al toque
     useEffect(() => {
@@ -220,12 +227,27 @@ export default function Gestion(props) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'x-access-token': currentUser.accessToken
             },
             body: JSON.stringify(newUser)
         })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                if (data.message === "User was registered successfully!") {
+                    showSuccessfulRegister()
+                    getUsuarios()
+                }
+                else {
+                    showCreationError()
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
 
-        console.log("Usuario creado correctamente")
-        props.updateUsers()
+
+        //console.log("Usuario creado correctamente")
         setName("");
         setLastName("");
         setUserName("");
@@ -233,7 +255,7 @@ export default function Gestion(props) {
         setPassword("");
         setConfirmPassword("");
         setSelectedValues([]);
-        props.handleCloseModal()
+        handleCloseModal()
 
     }
     const handleEditUser = (user) => {
@@ -275,32 +297,25 @@ export default function Gestion(props) {
             },
             body: JSON.stringify(updatedUser),
         })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                showSuccessfulEditUser()
-                return response.json();
-            })
+            .then((response) => response.json())
             .then((data) => {
-                // Update the user's information in the state
-                const updatedUsers = users.map(u => u.id === data.id ? data : u);
-                setUsers(updatedUsers);
-                console.log("Actualice los estados")
-                setSelectedUser(null);
-                setName("");
-                setLastName("");
-                setUserName("");
-                setEmail("");
-                setPassword("");
-                setConfirmPassword("");
-                setSelectedValues([]);
-                setCreateUserDialogOpen(false);
+                console.log(data);
+                if (data.message === "User was updated successfully!") {
+                    handleCloseModal()
+                    showSuccessfulEditUser()
+                    getUsuarios()
+
+                }
+                else {
+                    showCreationError()
+                }
             })
             .catch((error) => {
-                console.error("There was an error!", error);
+                console.error("Error:", error);
             });
-        //Chequear esto
+
+
+        
 
 
     };
@@ -334,6 +349,7 @@ export default function Gestion(props) {
         setConfirmPassword("");
         setSelectedValues([]);
         setCreateUserDialogOpen(false)
+        setModalFlag(false)
 
     }
 
@@ -409,7 +425,7 @@ export default function Gestion(props) {
                                             <Grid item xs={6} md={6} lg={6} style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end' }}>
                                                 <TextField
                                                     value={busqueda}
-                                                    placeholder="Busqueda por nombre de comedor"
+                                                    placeholder="Busqueda por nombre de usuario o mail"
                                                     style={{ marginRight: '8px', width: '100%' }}
                                                     onChange={handleChangeBusqueda}
 
@@ -485,6 +501,7 @@ export default function Gestion(props) {
                     <CustomAlert text={"Las contraseñas no coinciden!"} severity={"error"} open={openUnmatchingPasswords} closeAction={closeUnmatchingPasswords} />
                     <CustomAlert text={"Ingresa un mail valido!"} severity={"error"} open={openInvalidMail} closeAction={closeInvalidMail} />
                     <CustomAlert text={"La contraseña debe tener al menos 8 caracteres!"} severity={"error"} open={openInvalidPassword} closeAction={closeInvalidPassword} />
+                    <CustomAlert text={"Error en la creacion del usuario!"} severity={"error"} open={openCreationError} closeAction={closeCreationError} />
 
                 </Box>
             </ThemeProvider>
@@ -496,7 +513,7 @@ export default function Gestion(props) {
                     <div className="modal-content"  >
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                             <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
-                                Crear Usuario
+                                {modalFlag ? "Editar Usuario" : "Crear Usuario"}
                             </Typography>
                         </Grid>
 
