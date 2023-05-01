@@ -89,7 +89,7 @@ export default function EditarComedorModal(props) {
     return (
         <Modal open={props.open} onClose={props.handleCloseModal} >
 
-            <div className="modal-container" >
+            <div className="modal-c-container" >
                 <div className="modal-content">
                     <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         <Typography component="h2" variant="h6" color="#8d75c6" gutterBottom>
@@ -103,8 +103,8 @@ export default function EditarComedorModal(props) {
                         <TextField label="Direccion" defaultValue={direccion} onChange={handleDireccion}></TextField>
                     </Grid>
                     </div>
-                    <div style={{marginTop:'20px'}}>
-                    <Grid container spacing={2}>
+                    <div >
+                    <Grid container spacing={2} style={{marginTop:'20px'}}>
                     <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                         <Button variant="contained"  style={{backgroundColor:'#8d75c6'}}onClick={props.handleCloseModal}>Cancelar</Button>
                     </Grid>

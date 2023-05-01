@@ -67,36 +67,49 @@ export default function ComedorItem(props) {
                     }}
                 >
                     <Grid item xs sx={{ textAlign: 'center' }}>
-                        <Typography
-                            component="h1"
-                            variant="h4"
-                            sx={{
-                                color: '#8d75c6',
-                                fontWeight: 'bold',
-                                fontSize: {
-                                    xs: '18px',
-                                    sm: '30px',
-                                    md: '40px',
-                                    lg: '48px',
-                                },
-                            }}
-                            gutterBottom
-                        >
-                            {props.nombre}
-                        </Typography>
-                    </Grid>
+  <Typography
+    component="h1"
+    variant="h4"
+    sx={{
+      color: '#8d75c6',
+      fontWeight: 'bold',
+      fontSize: {
+        xs: '24px',
+        sm: '36px',
+        md: '40px',
+        lg: '40px',
+      },
+      textTransform: 'uppercase',
+      marginBottom: '20px',
+    }}
+  >
+    {props.nombre}
+  </Typography>
+</Grid>
 
-                    <Grid item xs sx={{ textAlign: 'center' }}>
-                    <Button onClick={handleComedorDetailed} style={{color:'#8d75c6'}}  sx={{
-                        // <Button onClick={handleComedorDetailed} style={{backgroundColor:'#8d75c6',color:"white"}} sx={{
-                            fontSize: {
-                                xs: '14px',
-                                sm: '20px',
-                                md: '22px',
-                                lg: '22px',
-                            }
-                        }}>Ver más</Button>
-                    </Grid>
+<Grid item xs sx={{ textAlign: 'center' }}>
+  <Button
+    onClick={handleComedorDetailed}
+    variant="outlined"
+    sx={{
+      color: '#8d75c6',
+      borderColor: '#8d75c6',
+      textTransform: 'uppercase',
+      fontSize: {
+        xs: '14px',
+        sm: '20px',
+        md: '22px',
+        lg: '22px',
+      },
+      '&:hover': {
+        backgroundColor: '#8d75c6',
+        color: '#fff',
+      },
+    }}
+  >
+    Ver más
+  </Button>
+</Grid>
                 </Paper>
             </Grid>
 

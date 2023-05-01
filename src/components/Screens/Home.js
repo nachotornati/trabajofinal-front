@@ -164,7 +164,10 @@ export default function Home(props) {
                                             </Grid>
                                             <Grid item xs={6} md={6} lg={6}>
                                                 <Button
-                                                    sx={{ backgroundColor: '#8d75c6' }}
+                                                    sx={{ backgroundColor: '#8d75c6', '&:hover': {
+                                                        backgroundColor: '#8d75c6',
+                                                        color: '#fff',
+                                                      } }}
                                                     variant="contained"
                                                     style={{ width: '100%', height: '100%' }}
                                                     onClick={() => {

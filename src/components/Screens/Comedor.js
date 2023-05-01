@@ -44,6 +44,7 @@ export default function Comedor(props) {
 
     //console.log(currentEncuesta)
     console.log(typeof props.tipos);
+    console.log(currentDinner)
 
     const showSuccessfulRegister = (event, reason) => {
         setOpenSuccessfulRegister(true);
@@ -275,8 +276,6 @@ export default function Comedor(props) {
 
                     </Container>
                     <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
-                    <CustomAlert text={"Comedor actualizado exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
-                    <CustomAlert text={"Encuesta cargada exitosamente!"} severity={"success"} open={openSuccessfulRegister} closeAction={closeSuccessfulRegister} />
                 </Box>
 
             </Box>
