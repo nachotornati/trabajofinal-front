@@ -27,6 +27,7 @@ import { TableContainer, TablePagination } from '@mui/material';
 import { Typography } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
 import CustomAlert from './CustomAlert';
+import '../../assets/scss/general.scss'
 
 
 
@@ -543,7 +544,7 @@ export default function Gestion(props) {
                         </Grid>
 
                         <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth >
                                 <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
                                 <Select
                                     labelId="demo-simple-select-label"
@@ -560,15 +561,15 @@ export default function Gestion(props) {
 
                     </div>
 
-                    <div style={{ marginTop: '20px' }}>
+                    <div style={{ marginTop: '40px' }}>
                         <Grid container spacing={2}>
                             <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                                <Button variant="contained" style={{ backgroundColor: '#8d75c6' }} onClick={() => handleCloseModal()}>Cancelar</Button>
+                                <Button variant="contained" style={{ backgroundColor: '#8d75c6',marginRight:'8px' }} onClick={() => handleCloseModal()}>Cancelar</Button>
                             </Grid>
                             <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                                 {modalFlag ?
-                                    (<Button variant='contained' style={{ backgroundColor: '#8d75c6' }} onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
-                                        <Button variant="contained" style={{ backgroundColor: '#8d75c6' }} onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
+                                    (<Button variant='contained' style={{ backgroundColor: '#8d75c6', marginLeft:'8px'}} onClick={() => editUser()} sx={{ ml: 2 }}>Editar</Button>) : (
+                                        <Button variant="contained" style={{ backgroundColor: '#8d75c6',marginLeft:'8px' }} onClick={() => createUser()} sx={{ ml: 2 }}>Guardar</Button>)
                                 }
                             </Grid>
                         </Grid>

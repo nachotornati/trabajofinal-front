@@ -22,26 +22,26 @@ export default function CrearEncuestaModal(props) {
     };
     const cancelChanges = () => {
         props.handleCloseModal()
+        
     }
 
     return (
         <Modal open={props.open} onClose={props.handleCloseModal}>
-            <div className="modal-container">
+            <div className="modal-c-container">
 
                 <div className="modal-content">
                     <Grid item xs={12} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                        <Typography component="h2" variant="h6"  style={{color:'#8d75c6'}}gutterBottom>
+                        <Typography component="h2" variant="h6"  style={{color:'#8d75c6',whiteSpace: 'pre-wrap', textAlign: 'center'}}gutterBottom>
                             Seleccione el tipo de encuesta
                         </Typography>
                     </Grid>
 
-                    
-                    <FormControl>
+                    <Grid item xs={12} style={{display:'flex', justifyContent:'center', height:'100%'}}>
+                    <FormControl style={{ width: '100%' }}>
                         <InputLabel id="demo-simple-select-label">{"Seleccione una opcion"}</InputLabel>
                         <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            multiple
                             value={selectedValues || []}
                             onChange={handleChange}
                             label="Option"
@@ -54,15 +54,16 @@ export default function CrearEncuestaModal(props) {
                             }
                         </Select>
                     </FormControl>
+                    </Grid>
                 </div>
 
                 <div>
                     <Grid container spacing={2} style={{ marginTop: '20px' }}>
                         <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white'}}onClick={props.handleCloseModal}>Cancelar</Button>
+                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white',marginRight:"8px"}}onClick={props.handleCloseModal}>Cancelar</Button>
                         </Grid>
                         <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white'}}onClick={() => window.location.href = `/comedor/nueva-encuesta/${selectedValues}`}>Siguiente</Button>
+                            <Button variant="contained" style={{backgroundColor:'#8d75c6',color:'white',marginLeft:'8px'}}onClick={() => window.location.href = `/comedor/nueva-encuesta/${selectedValues}`}>Siguiente</Button>
 
                         </Grid>
 

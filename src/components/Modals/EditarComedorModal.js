@@ -9,8 +9,16 @@ import { ComedorContext } from '../Context/ComedorContext';
 import { useState } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import CustomAlert from '../Screens/CustomAlert';
+import { makeStyles } from '@material-ui/core/styles';
 
 const mdTheme = createTheme();
+const useStyles = makeStyles({
+    root: {
+        '& .MuiInputBase-input': {
+            padding: 0,
+        },
+    },
+});
 
 export default function EditarComedorModal(props) {
     

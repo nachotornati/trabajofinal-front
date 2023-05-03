@@ -38,7 +38,7 @@ export default function ComedorItem(props) {
     return (
 
         <Grid container spacing={0} sx={{ mb: 1 }}>
-            <Grid item xs={8} lg={8} md={8}>
+            <Grid item xs={6} lg={8} md={8}>
 
 
                 <Paper
@@ -56,7 +56,7 @@ export default function ComedorItem(props) {
                 </Paper>
             </Grid>
 
-            <Grid item xs={4} lg={4} md={4}>
+            <Grid item xs={6} lg={4} md={4}>
                 <Paper
                     sx={{
                         p: 2,
@@ -67,49 +67,49 @@ export default function ComedorItem(props) {
                     }}
                 >
                     <Grid item xs sx={{ textAlign: 'center' }}>
-  <Typography
-    component="h1"
-    variant="h4"
-    sx={{
-      color: '#8d75c6',
-      fontWeight: 'bold',
-      fontSize: {
-        xs: '24px',
-        sm: '36px',
-        md: '40px',
-        lg: '40px',
-      },
-      textTransform: 'uppercase',
-      marginBottom: '20px',
-    }}
-  >
-    {props.nombre}
-  </Typography>
-</Grid>
+                        <Typography
+                            component="h1"
+                            variant="h4"
+                            sx={{
+                                color: '#8d75c6',
+                                fontWeight: 'bold',
+                                fontSize: {
+                                    xs: '24px',
+                                    sm: '36px',
+                                    md: '40px',
+                                    lg: '40px',
+                                },
+                                textTransform: 'uppercase',
+                                marginBottom: '20px',
+                            }}
+                        >
+                            {props.nombre}
+                        </Typography>
+                    </Grid>
 
-<Grid item xs sx={{ textAlign: 'center' }}>
-  <Button
-    onClick={handleComedorDetailed}
-    variant="outlined"
-    sx={{
-      color: '#8d75c6',
-      borderColor: '#8d75c6',
-      textTransform: 'uppercase',
-      fontSize: {
-        xs: '14px',
-        sm: '20px',
-        md: '22px',
-        lg: '22px',
-      },
-      '&:hover': {
-        backgroundColor: '#8d75c6',
-        color: '#fff',
-      },
-    }}
-  >
-    Ver más
-  </Button>
-</Grid>
+                    <Grid item xs sx={{ textAlign: 'center' }}>
+                        <Button
+                            onClick={handleComedorDetailed}
+                            variant="outlined"
+                            sx={{
+                                color: '#8d75c6',
+                                borderColor: '#8d75c6',
+                                textTransform: 'uppercase',
+                                fontSize: {
+                                    xs: '14px',
+                                    sm: '20px',
+                                    md: '22px',
+                                    lg: '22px',
+                                },
+                                '&:hover': {
+                                    backgroundColor: '#8d75c6',
+                                    color: '#fff',
+                                },
+                            }}
+                        >
+                            Ver más
+                        </Button>
+                    </Grid>
                 </Paper>
             </Grid>
 
