@@ -1,16 +1,13 @@
 import * as React from 'react';
-import { createTheme} from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Modal } from '@mui/material';
 import { TextField } from '@mui/material';
-import CustomAlert from '../Screens/CustomAlert';
 import { AuthContext } from '../Context/AuthContext';
 import { useContext } from 'react';
 import "../../assets/scss/modal.scss";
-const mdTheme = createTheme();
 
 
 
@@ -18,6 +15,7 @@ export default function CrearComedorModal(props) {
 
     const [nombre, setNombre] = useState('')
     const [direccion, setDireccion] = useState('')
+    const [isSaving, setIsSaving] = useState(false)
 
     const {currentUser} = useContext(AuthContext)
 
@@ -28,9 +26,6 @@ export default function CrearComedorModal(props) {
         setDireccion(value)
     }
 
-    const cancelChanges = () => {
-        props.handleCloseModal()
-    }
 
   
 
@@ -41,6 +36,7 @@ export default function CrearComedorModal(props) {
 
         }
         else {
+            setIsSaving(true)
             fetch(`https://trabajo-final-backend-7ezk.onrender.com/api/dinners`, {
                 method: 'POST',
                 headers: {
@@ -56,14 +52,19 @@ export default function CrearComedorModal(props) {
                 .then((response) => response.json())
                 .then((res) => {
 
+                    props.handleCloseModal()
                     props.updateComedores()
                     props.successMessage()
-                    props.handleCloseModal()
+                    
                     //Llamar funcion para recargar comedores
                 })
                 .catch((err) => {
                     console.log(err.message);
-                });
+                })
+                .finally(() => {
+                    setIsSaving(false)
+                }
+                );
             
             }   
         }
@@ -94,7 +95,7 @@ export default function CrearComedorModal(props) {
                                 <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={props.handleCloseModal}>Cancelar</Button>
                             </Grid>
                             <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
-                                <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={crearComedor} >Guardar</Button>
+                                <Button variant="contained" style={{backgroundColor:'#8d75c6'}}onClick={crearComedor} disabled={isSaving} >Guardar</Button>
                             </Grid>
 
                         </Grid>

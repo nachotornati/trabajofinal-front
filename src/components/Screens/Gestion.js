@@ -4,14 +4,13 @@ import Grid from '@mui/material/Grid';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
-import { Stack, TextField } from '@mui/material';
+import { TextField } from '@mui/material';
 import { Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import Modal from '@mui/material/Modal';
@@ -25,32 +24,23 @@ import { AuthContext } from '../Context/AuthContext';
 import { TableCell } from '@mui/material';
 import { TableContainer, TablePagination } from '@mui/material';
 import { Typography } from '@mui/material';
-import { makeStyles } from '@material-ui/core/styles';
 import CustomAlert from './CustomAlert';
 import '../../assets/scss/general.scss'
 
 
 
 const mdTheme = createTheme();
-const useStyles = makeStyles({
-    root: {
-        '& .MuiInputBase-input': {
-            padding: 0,
-        },
-    },
-});
+
 
 export default function Gestion(props) {
-    const classes = useStyles();
+    
     const { currentUser } = useContext(AuthContext);
-    const [searchQuery, setSearchQuery] = useState('');
+   
     const [users, setUsers] = useState([]);
     const [tableUsers, setTableUsers] = useState([]);
     const [busqueda, setBusqueda] = useState("")
     const [selectedUser, setSelectedUser] = useState(null);
-    const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
     const [createUserDialogOpen, setCreateUserDialogOpen] = useState(false);
-    const [searchUserModalOpen, setSearchUserModalOpen] = useState(false)
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
     const [page, setPage] = React.useState(0);
     const [name, setName] = useState("");
@@ -409,7 +399,7 @@ export default function Gestion(props) {
                                     ? theme.palette.grey[100]
                                     : theme.palette.grey[900],
                             flexGrow: 1,
-                            height: '100vh',
+                            height: '90vh',
                             overflow: 'auto',
                         }}
                     >
@@ -561,7 +551,7 @@ export default function Gestion(props) {
 
                     </div>
 
-                    <div style={{ marginTop: '40px' }}>
+                    <div style={{ marginTop: '40px' }} >
                         <Grid container spacing={2}>
                             <Grid item xs={6} style={{ display: 'flex', justifyContent: 'center', height: '100%' }}>
                                 <Button variant="contained" style={{ backgroundColor: '#8d75c6',marginRight:'8px' }} onClick={() => handleCloseModal()}>Cancelar</Button>

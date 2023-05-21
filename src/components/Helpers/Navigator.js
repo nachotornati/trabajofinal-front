@@ -15,7 +15,6 @@ import Divider from '@mui/material/Divider';
 import LogoutIcon from '@mui/icons-material/Logout';
 import HomeIcon from '@mui/icons-material/Home';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
-import { useHistory } from "react-router-dom";
 
 //import SavingsIcon from '@mui/icons-material/Savings'
 
@@ -26,7 +25,7 @@ import { NavigatorItem } from "./NavigatorItem";
 //import { signOut } from "firebase/auth";
 import { useContext } from "react";
 import { AuthContext } from "../Context/AuthContext";
-import { useEffect } from "react";
+
 
 
 
@@ -111,8 +110,10 @@ export const Navigator = () => {
             </div>
             <List sx={{ paddingLeft: "16px" }}>
                 <NavigatorItem name={"Home"} icon={<HomeIcon sx={{ color: "#8d75c6" }} />} path={"/home"} />
+                {currentUser.roles.includes("ROLE_ADMIN") && (
                 <NavigatorItem name={"Gestion Usuarios"} icon={<SupervisorAccountIcon sx={{ color: "#8d75c6" }} />} path={"/admin"} />
-            </List>
+                )}
+                </List>
             <Divider sx={{ color: "white" }} />
             <div style={{paddingLeft:"16px"}}>
             <NavigatorItem name={"Cerrar Sesion"} icon={<LogoutIcon sx={{ color: "#8d75c6" }} />} action={() => { logOut() }} path={"/"} />

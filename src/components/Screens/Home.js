@@ -13,20 +13,18 @@ import TableBody from '@mui/material/TableBody';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Paper } from '@mui/material';
-import PollIcon from '@mui/icons-material/Poll';
-import SoupKitchenIcon from '@mui/icons-material/SoupKitchen';
+
 import ComedorItem from './ComedorItem';
 import { TableContainer, TablePagination } from '@mui/material';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+
 import { TextField } from '@mui/material';
 import { ComedorContext } from '../Context/ComedorContext';
 import { useContext } from 'react';
 import { AuthContext } from '../Context/AuthContext';
 import CrearComedorModal from '../Modals/CrearComedorModal';
 import CustomAlert from './CustomAlert';
-import { EncuestaContext } from '../Context/EncuestaContext';
 
 const mdTheme = createTheme();
 export default function Home(props) {
@@ -38,9 +36,10 @@ export default function Home(props) {
     const [busqueda, setBusqueda] = useState("")
     const [crearComedorModalOpen, setCrearComedorModalOpen] = useState(false)
     const { currentUser } = useContext(AuthContext);
-    const { currentDinner } = useContext(ComedorContext);
+    
     const { dispatch } = useContext(ComedorContext);
-    const { encuestaGuardada } = useContext(EncuestaContext);
+    console.log(currentUser)
+    
 
     const [openCompleteAllFieldMessage, setopenCompleteAllFieldsError] = React.useState(false);
     
@@ -86,6 +85,7 @@ export default function Home(props) {
                 || elemento.address.toString().toLowerCase().includes(terminoBusqueda.toLowerCase())) {
                 return elemento
             }
+            
         })
         setComedores(resultadoTablaBusqueda)
     }
@@ -139,7 +139,7 @@ export default function Home(props) {
                                     ? theme.palette.grey[100]
                                     : theme.palette.grey[900],
                             flexGrow: 1,
-                            height: '100vh',
+                            height: '90vh',
                             overflow: 'auto',
                         }}
                     >
